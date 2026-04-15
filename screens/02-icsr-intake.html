@@ -610,19 +610,19 @@
   <!-- TOP NAV -->
   <nav class="topnav">
     <div class="nav-left">
-      <a class="nav-logo" href="03-dashboard.html" style="text-decoration:none;color:#fff;">
+      <a class="nav-logo" href="/screens/03-dashboard.html" style="text-decoration:none;color:#fff;">
         <div class="nav-logo-dot"></div>
         CausalityAI
       </a>
       <div class="nav-breadcrumb">
-        <a href="03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
+        <a href="/screens/03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
         <span>›</span> New ICSR <span>›</span> Intake Form
       </div>
     </div>
     <div class="nav-right">
       <div class="nav-meta">N A · SFDA · April 2025</div>
       <div class="nav-avatar">NA</div>
-      <button onclick="window.location.href='00-login.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--w-warm-silver);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;">Sign out</button>
+      <button onclick="window.location.href='/screens/00-login.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--w-warm-silver);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;">Sign out</button>
     </div>
   </nav>
 
@@ -630,7 +630,7 @@
   <div class="stepbar">
     <div class="step active">1  Patient data</div>
     <div class="step">2  Clinical context</div>
-    <a class="step" href="01-ai-result.html" style="text-decoration:none;">3  AI assessment result</a>
+    <a class="step" href="/screens/01-ai-result.html" style="text-decoration:none;">3  AI assessment result</a>
     <div class="step">4  Review &amp; confirm</div>
   </div>
 
@@ -1098,7 +1098,7 @@
         document.getElementById('narrative-alert').style.display = 'block';
         return;
       }
-      window.location.href = '01-ai-result.html';
+      window.location.href = '/screens/01-ai-result.html';
     }
 
     // Init

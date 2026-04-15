@@ -626,29 +626,29 @@
   <!-- TOP NAV -->
   <nav class="topnav">
     <div class="nav-left">
-      <a class="nav-logo" href="03-dashboard.html" style="text-decoration:none;color:#fff;">
+      <a class="nav-logo" href="/screens/03-dashboard.html" style="text-decoration:none;color:#fff;">
         <div class="nav-logo-dot"></div>
         CausalityAI
       </a>
       <div class="nav-breadcrumb">
-        <a href="03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
+        <a href="/screens/03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
         <span>›</span>
-        <a href="02-icsr-intake.html" style="color:var(--w-warm-silver);text-decoration:none;">New ICSR</a>
+        <a href="/screens/02-icsr-intake.html" style="color:var(--w-warm-silver);text-decoration:none;">New ICSR</a>
         <span>›</span> Result
       </div>
     </div>
     <div class="nav-right">
       <div class="nav-meta">N A · SFDA · April 2025</div>
-      <a href="02-icsr-intake.html" style="background:var(--w-terracotta);color:#fff;border:none;padding:6px 14px;font-family:var(--font-sans);font-size:12px;font-weight:500;letter-spacing:0.16px;cursor:pointer;border-radius:0;text-decoration:none;display:inline-flex;align-items:center;">+ New ICSR</a>
+      <a href="/screens/02-icsr-intake.html" style="background:var(--w-terracotta);color:#fff;border:none;padding:6px 14px;font-family:var(--font-sans);font-size:12px;font-weight:500;letter-spacing:0.16px;cursor:pointer;border-radius:0;text-decoration:none;display:inline-flex;align-items:center;">+ New ICSR</a>
       <div class="nav-avatar">NA</div>
-      <button onclick="window.location.href='00-login.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--w-warm-silver);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;">Sign out</button>
+      <button onclick="window.location.href='/screens/00-login.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--w-warm-silver);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;">Sign out</button>
     </div>
   </nav>
 
   <!-- STEP BAR -->
   <div class="stepbar">
-    <a class="step done" href="02-icsr-intake.html" style="text-decoration:none;">1  Patient data</a>
-    <a class="step done" href="02-icsr-intake.html" style="text-decoration:none;">2  Clinical context</a>
+    <a class="step done" href="/screens/02-icsr-intake.html" style="text-decoration:none;">1  Patient data</a>
+    <a class="step done" href="/screens/02-icsr-intake.html" style="text-decoration:none;">2  Clinical context</a>
     <div class="step active">3  AI assessment result</div>
     <div class="step">4  Review &amp; confirm</div>
   </div>
@@ -981,7 +981,7 @@
         return;
       }
       document.getElementById('reasoning').style.borderBottomColor = '#24a148';
-      alert(`Decision logged.\n\n${selected}\n\nCase ICSR-2024-08841 submitted to audit trail.`); setTimeout(() => { window.location.href = '03-dashboard.html'; }, 500);
+      alert(`Decision logged.\n\n${selected}\n\nCase ICSR-2024-08841 submitted to audit trail.`); setTimeout(() => { window.location.href = '/screens/03-dashboard.html'; }, 500);
     }
   </script>
 
