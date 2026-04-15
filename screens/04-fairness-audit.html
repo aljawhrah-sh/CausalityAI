@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CausalityAI — Fairness & Audit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --c-blue:        #0f62fe;
+      --c-gray-10:     #f4f4f4;
+      --c-gray-20:     #e0e0e0;
+      --c-gray-30:     #c6c6c6;
+      --c-gray-60:     #6f6f6f;
+      --c-green-50:    #24a148;
+      --c-red-60:      #da1e28;
+      --c-yellow-30:   #f1c21b;
+
+      --w-parchment:   #f5f4ed;
+      --w-ivory:       #faf9f5;
+      --w-terracotta:  #c96442;
+      --w-coral:       #d97757;
+      --w-near-black:  #141413;
+      --w-olive-gray:  #5e5d59;
+      --w-stone-gray:  #87867f;
+      --w-charcoal:    #4d4c48;
+      --w-border-cream:#f0eee6;
+      --w-border-warm: #e8e6dc;
+      --w-warm-sand:   #e8e6dc;
+      --w-dark-surf:   #30302e;
+      --w-warm-silver: #b0aea5;
+
+      --l-indigo:      #5e6ad2;
+      --p-sage-border: #bfc1b7;
+      --s-lime:        #c2ef4e;
+
+      --font-serif: Georgia, serif;
+      --font-sans:  'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+      --font-mono:  'IBM Plex Mono','Menlo',monospace;
+
+      --sp-4:4px; --sp-8:8px; --sp-12:12px; --sp-16:16px;
+      --sp-24:24px; --sp-32:32px; --sp-48:48px;
+    }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;}
+    body{
+      font-family:var(--font-sans);
+      background:var(--w-parchment);
+      color:var(--w-near-black);
+      min-height:100vh;
+      display:flex;flex-direction:column;
+    }
+
+    /* ── NAV ── */
+    .topnav{
+      background:var(--w-near-black);height:48px;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 var(--sp-32);position:sticky;top:0;z-index:100;
+      border-bottom:1px solid var(--w-dark-surf);flex-shrink:0;
+    }
+    .nav-left{display:flex;align-items:center;gap:var(--sp-32);}
+    .nav-logo{
+      font-size:14px;font-weight:500;color:#fff;
+      display:flex;align-items:center;gap:var(--sp-8);letter-spacing:0.16px;
+    }
+    .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--w-terracotta);}
+    .nav-links{display:flex;}
+    .nav-link{
+      font-size:13px;color:var(--w-warm-silver);
+      padding:0 var(--sp-16);height:48px;
+      display:flex;align-items:center;
+      border-bottom:2px solid transparent;
+      letter-spacing:0.16px;cursor:pointer;transition:color 0.15s;
+    }
+    .nav-link:hover{color:#fff;}
+    .nav-link.active{color:#fff;border-bottom-color:var(--w-terracotta);}
+    .nav-right{display:flex;align-items:center;gap:var(--sp-16);}
+    .nav-meta{font-size:12px;color:var(--w-warm-silver);letter-spacing:0.32px;}
+    .nav-avatar{
+      width:28px;height:28px;border-radius:50%;
+      background:var(--w-terracotta);
+      display:flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:600;color:#fff;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header{
+      background:var(--w-ivory);
+      border-bottom:1px solid var(--w-border-warm);
+      padding:var(--sp-16) var(--sp-32);
+      display:flex;align-items:flex-end;justify-content:space-between;
+      flex-shrink:0;
+    }
+    .page-title{
+      font-family:var(--font-serif);
+      font-size:24px;font-weight:500;
+      color:var(--w-near-black);line-height:1.2;
+    }
+    .page-subtitle{
+      font-size:13px;color:var(--w-stone-gray);
+      margin-top:3px;letter-spacing:0.16px;
+    }
+    .header-badges{display:flex;align-items:center;gap:var(--sp-8);}
+    .header-badge{
+      font-size:11px;padding:3px 10px;border-radius:24px;
+      letter-spacing:0.16px;font-family:var(--font-mono);
+    }
+    .badge-version{background:var(--w-warm-sand);color:var(--w-olive-gray);}
+    .badge-period{background:rgba(94,106,210,0.10);color:var(--l-indigo);}
+
+    /* ── TAB BAR ── */
+    .tabbar{
+      background:var(--w-ivory);
+      border-bottom:1px solid var(--w-border-warm);
+      padding:0 var(--sp-32);
+      display:flex;flex-shrink:0;
+    }
+    .tab{
+      font-size:13px;font-weight:400;
+      color:var(--w-stone-gray);
+      padding:10px var(--sp-16);
+      border-bottom:2px solid transparent;
+      letter-spacing:0.16px;white-space:nowrap;
+      cursor:pointer;transition:color 0.15s;
+    }
+    .tab:hover{color:var(--w-near-black);}
+    .tab.active{
+      color:var(--w-near-black);
+      border-bottom-color:var(--w-terracotta);
+      font-weight:500;
+    }
+
+    /* ── TAB PANELS ── */
+    .tab-panel{display:none;flex:1;overflow-y:auto;}
+    .tab-panel.active{display:block;}
+    .tab-content{padding:var(--sp-32);}
+
+    /* ── SECTION TITLE ── */
+    .section-title{
+      font-family:var(--font-serif);
+      font-size:18px;font-weight:500;
+      color:var(--w-near-black);line-height:1.2;
+      margin-bottom:var(--sp-4);
+    }
+    .section-sub{
+      font-size:12px;color:var(--w-stone-gray);
+      letter-spacing:0.16px;margin-bottom:var(--sp-24);
+    }
+    .subsection-label{
+      font-size:11px;font-weight:500;
+      color:var(--w-stone-gray);letter-spacing:0.32px;
+      text-transform:uppercase;
+      margin-bottom:var(--sp-12);
+      padding-bottom:var(--sp-8);
+      border-bottom:1px solid var(--w-border-cream);
+    }
+
+    /* ── FAIRNESS GRID ── */
+    .fairness-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:var(--sp-16);
+      margin-bottom:var(--sp-32);
+    }
+    .fairness-card{
+      background:var(--w-ivory);
+      border:1px solid var(--w-border-warm);
+      border-radius:0;padding:var(--sp-16);
+    }
+
+    /* F1 bar row */
+    .f1-row{
+      display:flex;align-items:center;gap:var(--sp-8);
+      margin-bottom:var(--sp-10);
+    }
+    .f1-label{
+      font-size:12px;color:var(--w-near-black);
+      width:130px;flex-shrink:0;letter-spacing:0.16px;
+    }
+    .f1-track{
+      flex:1;height:8px;
+      background:var(--w-border-cream);
+      border-radius:0;overflow:visible;
+      position:relative;
+    }
+    .f1-fill{height:100%;border-radius:0;transition:width 0.5s ease;}
+    .f1-fill.good{background:var(--c-green-50);}
+    .f1-fill.warn{background:var(--c-yellow-30);}
+    .f1-fill.danger{background:var(--c-red-60);opacity:0.7;}
+    .f1-fill.terracotta{background:var(--w-terracotta);}
+    /* reference line */
+    .f1-ref{
+      position:absolute;top:-4px;height:16px;
+      width:2px;background:var(--w-near-black);opacity:0.25;
+    }
+    .f1-val{
+      font-family:var(--font-mono);font-size:12px;
+      color:var(--w-olive-gray);width:36px;text-align:right;
+      letter-spacing:0.16px;
+    }
+    .f1-val.warn{color:var(--c-yellow-30);}
+    .f1-val.danger{color:var(--c-red-60);font-weight:500;}
+    .f1-val.good{color:var(--c-green-50);}
+
+    /* Alert banners — Sentry lime */
+    .alert-lime{
+      background:rgba(194,239,78,0.12);
+      border:1px solid rgba(194,239,78,0.35);
+      border-left:3px solid var(--s-lime);
+      padding:var(--sp-8) var(--sp-12);
+      margin-top:var(--sp-12);
+      font-size:12px;color:var(--w-charcoal);
+      line-height:1.5;letter-spacing:0.16px;
+    }
+    .alert-lime strong{color:#2a4000;font-weight:600;}
+
+    .alert-red{
+      background:rgba(218,30,40,0.06);
+      border:1px solid rgba(218,30,40,0.20);
+      border-left:3px solid var(--c-red-60);
+      padding:var(--sp-8) var(--sp-12);
+      margin-top:var(--sp-12);
+      font-size:12px;color:var(--c-red-60);
+      line-height:1.5;letter-spacing:0.16px;
+    }
+    .alert-red strong{font-weight:600;display:block;margin-bottom:2px;}
+
+    .alert-green{
+      background:rgba(36,161,72,0.08);
+      border:1px solid rgba(36,161,72,0.25);
+      border-left:3px solid var(--c-green-50);
+      padding:var(--sp-8) var(--sp-12);
+      margin-top:var(--sp-12);
+      font-size:12px;color:#155724;
+      line-height:1.5;letter-spacing:0.16px;
+    }
+
+    /* ── DRIFT MONITORING ── */
+    .drift-wrap{max-width:900px;}
+    .drift-timeline{margin-bottom:var(--sp-32);}
+    .drift-row{
+      display:grid;
+      grid-template-columns:100px 120px 1fr 200px;
+      align-items:center;gap:var(--sp-16);
+      padding:var(--sp-12) 0;
+      border-bottom:1px solid var(--w-border-cream);
+    }
+    .drift-row:last-child{border-bottom:none;}
+    .drift-month{
+      font-size:13px;font-weight:500;
+      color:var(--w-near-black);letter-spacing:0.16px;
+    }
+    .drift-kappa{
+      font-family:var(--font-mono);font-size:14px;font-weight:500;
+    }
+    .drift-kappa.good{color:var(--c-green-50);}
+    .drift-kappa.warn{color:var(--c-yellow-30);}
+    .drift-kappa.danger{color:var(--c-red-60);}
+    .drift-dots{display:flex;gap:5px;align-items:center;}
+    .drift-dot{
+      width:12px;height:12px;border-radius:50%;flex-shrink:0;
+    }
+    .drift-dot.ok{background:var(--c-green-50);}
+    .drift-dot.warn{background:var(--c-yellow-30);}
+    .drift-dot.danger{background:var(--c-red-60);opacity:0.7;}
+    .drift-dot.empty{
+      background:transparent;
+      border:1px solid var(--p-sage-border);
+    }
+    .drift-status{
+      font-size:12px;color:var(--w-olive-gray);letter-spacing:0.16px;
+    }
+    .drift-event{
+      font-size:11px;padding:2px 8px;border-radius:24px;
+      letter-spacing:0.16px;font-weight:500;
+    }
+    .drift-event.retrained{
+      background:rgba(36,161,72,0.10);color:#155724;
+    }
+    .drift-event.flagged{
+      background:rgba(218,30,40,0.10);color:var(--c-red-60);
+    }
+    .drift-event.stable{
+      background:rgba(0,0,0,0.05);color:var(--w-stone-gray);
+    }
+
+    /* Drift summary cards */
+    .drift-summary{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:var(--sp-12);margin-bottom:var(--sp-24);
+    }
+    .drift-sum-card{
+      background:var(--w-ivory);border:1px solid var(--w-border-warm);
+      padding:var(--sp-16);border-radius:0;
+    }
+    .drift-sum-label{
+      font-size:11px;color:var(--w-stone-gray);
+      letter-spacing:0.32px;text-transform:uppercase;margin-bottom:var(--sp-8);
+    }
+    .drift-sum-val{
+      font-family:var(--font-mono);font-size:22px;font-weight:500;
+      color:var(--w-near-black);line-height:1;margin-bottom:var(--sp-4);
+    }
+    .drift-sum-sub{font-size:11px;color:var(--w-stone-gray);letter-spacing:0.16px;}
+
+    /* ── AUDIT LOG ── */
+    .audit-controls{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:var(--sp-16);
+    }
+    .audit-search{
+      background:var(--c-gray-10);border:none;
+      border-bottom:2px solid var(--c-gray-30);
+      padding:6px 12px;font-family:var(--font-sans);
+      font-size:12px;color:var(--w-near-black);
+      letter-spacing:0.16px;border-radius:0;outline:none;
+      width:240px;transition:border-color 0.15s;
+    }
+    .audit-search:focus{border-bottom-color:var(--w-terracotta);}
+    .audit-search::placeholder{color:var(--c-gray-60);}
+    .export-btn{
+      background:var(--w-warm-sand);border:none;
+      border-bottom:2px solid var(--p-sage-border);
+      color:var(--w-charcoal);padding:6px 16px;
+      font-family:var(--font-sans);font-size:12px;font-weight:500;
+      letter-spacing:0.16px;cursor:pointer;border-radius:0;
+      transition:all 0.15s;
+    }
+    .export-btn:hover{background:var(--w-border-warm);}
+
+    /* IBM Carbon audit table */
+    .audit-table{width:100%;border-collapse:collapse;}
+    .audit-table th{
+      font-size:11px;font-weight:500;color:var(--w-stone-gray);
+      text-transform:uppercase;letter-spacing:0.32px;
+      padding:var(--sp-8) var(--sp-12);
+      background:var(--c-gray-10);
+      border-bottom:1px solid var(--w-border-warm);
+      text-align:left;white-space:nowrap;
+    }
+    .audit-table td{
+      font-size:12px;color:var(--w-near-black);
+      padding:var(--sp-12) var(--sp-12);
+      border-bottom:1px solid var(--w-border-cream);
+      vertical-align:middle;letter-spacing:0.16px;
+    }
+    .audit-table tr:last-child td{border-bottom:none;}
+    .audit-table tr{border-left:3px solid transparent;transition:all 0.12s;}
+    .audit-table tr:hover{
+      background:rgba(201,100,66,0.03);
+      border-left-color:var(--w-border-warm);
+    }
+
+    .ts-cell{
+      font-family:var(--font-mono);font-size:11px;
+      color:var(--w-stone-gray);white-space:nowrap;
+    }
+    .case-cell{
+      font-family:var(--font-mono);font-size:11px;
+      color:var(--w-olive-gray);
+    }
+    .assessor-cell{font-weight:500;}
+    .pred-cell{font-size:11px;color:var(--w-olive-gray);}
+    .arrow-cell{font-size:11px;color:var(--p-sage-border);}
+
+    .action-pill{
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:10px;font-weight:500;padding:2px 8px;
+      border-radius:24px;letter-spacing:0.16px;white-space:nowrap;
+    }
+    .action-confirm{background:rgba(36,161,72,0.10);color:#155724;}
+    .action-override{background:rgba(241,194,27,0.12);color:#7a5c00;}
+    .action-override-sig{background:rgba(218,30,40,0.10);color:var(--c-red-60);}
+
+    .reasoning-excerpt{
+      font-size:11px;color:var(--w-stone-gray);
+      font-style:italic;max-width:200px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+
+    /* Immutable badge */
+    .immutable-badge{
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:10px;padding:2px 7px;border-radius:24px;
+      background:rgba(94,106,210,0.08);color:var(--l-indigo);
+      letter-spacing:0.16px;font-weight:500;margin-left:6px;
+    }
+
+    /* ── RETRAINING HISTORY ── */
+    .retrain-timeline{max-width:800px;}
+    .retrain-item{
+      display:grid;
+      grid-template-columns:140px 1fr;
+      gap:var(--sp-24);
+      padding:var(--sp-16) 0;
+      border-bottom:1px solid var(--w-border-cream);
+      position:relative;
+    }
+    .retrain-item:last-child{border-bottom:none;}
+    .retrain-date{
+      font-family:var(--font-mono);font-size:12px;
+      color:var(--w-olive-gray);letter-spacing:0.16px;
+      padding-top:2px;
+    }
+    .retrain-version{
+      font-family:var(--font-mono);font-size:13px;font-weight:500;
+      color:var(--w-near-black);margin-bottom:var(--sp-4);
+    }
+    .retrain-trigger{
+      font-size:12px;color:var(--w-stone-gray);
+      letter-spacing:0.16px;margin-bottom:var(--sp-8);
+    }
+    .retrain-deltas{display:flex;gap:var(--sp-16);flex-wrap:wrap;}
+    .retrain-delta{
+      font-size:11px;letter-spacing:0.16px;
+    }
+    .retrain-delta .key{color:var(--w-stone-gray);}
+    .retrain-delta .val{
+      font-family:var(--font-mono);font-weight:500;margin-left:4px;
+    }
+    .retrain-delta .val.up{color:var(--c-green-50);}
+    .retrain-delta .val.down{color:var(--c-red-60);}
+    .retrain-badge{
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:10px;padding:2px 8px;border-radius:24px;
+      font-weight:500;letter-spacing:0.16px;margin-bottom:var(--sp-8);
+    }
+    .retrain-badge.current{
+      background:rgba(36,161,72,0.10);color:#155724;
+    }
+    .retrain-badge.drift{
+      background:rgba(218,30,40,0.10);color:var(--c-red-60);
+    }
+    .retrain-badge.scheduled{
+      background:rgba(241,194,27,0.10);color:#7a5c00;
+    }
+    .retrain-badge.initial{
+      background:rgba(0,0,0,0.06);color:var(--w-charcoal);
+    }
+
+    /* ── FOOTER ── */
+    .page-footer{
+      background:var(--w-ivory);
+      border-top:1px solid var(--w-border-warm);
+      padding:var(--sp-8) var(--sp-32);
+      display:flex;align-items:center;justify-content:space-between;
+      font-size:11px;color:var(--w-stone-gray);
+      letter-spacing:0.16px;flex-shrink:0;
+    }
+    .footer-model{font-family:var(--font-mono);font-size:11px;color:var(--w-stone-gray);}
+
+    /* utils */
+    .divider{height:1px;background:var(--w-border-cream);margin:var(--sp-24) 0;}
+    .mt-24{margin-top:var(--sp-24);}
+    .mb-16{margin-bottom:var(--sp-16);}
+    .sp-10{margin-bottom:10px;}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <div class="nav-left">
+      <a class="nav-logo" href="03-dashboard.html" style="text-decoration:none;color:#fff;">
+        <div class="nav-logo-dot"></div>
+        CausalityAI
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="03-dashboard.html" style="text-decoration:none;">Dashboard</a>
+        <a class="nav-link" href="02-icsr-intake.html" style="text-decoration:none;">New ICSR</a>
+        <a class="nav-link" href="03-dashboard.html" style="text-decoration:none;">Reports</a>
+        <a class="nav-link active" href="04-fairness-audit.html" style="text-decoration:none;">Audit Log</a>
+        <a class="nav-link" href="04-fairness-audit.html" style="text-decoration:none;">Settings</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-meta">N A · SFDA · April 2025</div>
+      <div class="nav-avatar">NA</div>
+      <button onclick="window.location.href='00-login.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--w-warm-silver);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Fairness, Monitoring & Audit</div>
+      <div class="page-subtitle">Model fairness evaluation · Drift detection · Immutable audit trail · Retraining history</div>
+    </div>
+    <div class="header-badges">
+      <span class="header-badge badge-version">Model v1.4.2</span>
+      <span class="header-badge badge-period">Q1 2025 Evaluation</span>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tabbar">
+    <div class="tab active" onclick="switchTab('fairness',this)">Fairness Report</div>
+    <div class="tab" onclick="switchTab('drift',this)">Drift Monitoring</div>
+    <div class="tab" onclick="switchTab('audit',this)">Audit Log</div>
+    <div class="tab" onclick="switchTab('retrain',this)">Retraining History</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- TAB 1 — FAIRNESS REPORT                          -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="panel-fairness">
+    <div class="tab-content">
+      <div class="section-title">Fairness evaluation report</div>
+      <div class="section-sub">F1-score breakdown by demographic and geographic subgroups · Reference line = overall model F1 (0.79) · Threshold flag: F1 &lt; 0.65</div>
+
+      <div class="fairness-grid">
+
+        <!-- Age group -->
+        <div class="fairness-card">
+          <div class="subsection-label">F1-score by age group</div>
+
+          <div class="f1-row">
+            <div class="f1-label">18–34 years</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:96%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.76</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">35–54 years</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.79</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">55–74 years</div>
+            <div class="f1-track">
+              <div class="f1-fill terracotta" style="width:100%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val">0.81</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">75+ years</div>
+            <div class="f1-track">
+              <div class="f1-fill danger" style="width:73%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val danger">0.58</div>
+          </div>
+
+          <div class="alert-red">
+            <strong>Performance gap — 75+ age group</strong>
+            F1 of 0.58 is below the 0.65 threshold. Likely due to under-representation in training data. Recommend targeted data collection and retraining.
+          </div>
+        </div>
+
+        <!-- Sex -->
+        <div class="fairness-card">
+          <div class="subsection-label">F1-score by sex</div>
+
+          <div class="f1-row">
+            <div class="f1-label">Female</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.81</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Male</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:96%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.77</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Unknown</div>
+            <div class="f1-track">
+              <div class="f1-fill warn" style="width:84%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val warn">0.66</div>
+          </div>
+
+          <div class="alert-green">
+            ✓ No significant sex-based disparity detected. Female and male groups perform within 0.04 F1 of each other.
+          </div>
+
+          <div class="divider"></div>
+          <div class="subsection-label">F1-score by reporter type</div>
+
+          <div class="f1-row">
+            <div class="f1-label">Physician</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.83</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Pharmacist</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:94%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.78</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Patient / Consumer</div>
+            <div class="f1-track">
+              <div class="f1-fill warn" style="width:79%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val warn">0.63</div>
+          </div>
+        </div>
+
+        <!-- Reporter region -->
+        <div class="fairness-card">
+          <div class="subsection-label">F1-score by reporter region</div>
+
+          <div class="f1-row">
+            <div class="f1-label">Saudi Arabia</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val good">0.82</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">GCC region</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:96%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val good">0.78</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Europe</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:98%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val good">0.80</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Asia-Pacific</div>
+            <div class="f1-track">
+              <div class="f1-fill terracotta" style="width:85%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val">0.70</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Sub-Saharan Africa</div>
+            <div class="f1-track">
+              <div class="f1-fill danger" style="width:68%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val danger">0.56</div>
+          </div>
+
+          <div class="alert-red">
+            <strong>Performance gap — Sub-Saharan Africa</strong>
+            F1 of 0.56 is significantly below threshold. Low training data volume from this region. Flagged for next retraining cycle.
+          </div>
+          <div class="alert-lime">
+            <strong>Note:</strong> VigiBase representation for Sub-Saharan Africa is historically low (~2% of global reports). Model performance will improve with SFDA's data-sharing partnerships.
+          </div>
+        </div>
+
+        <!-- WHO-UMC category -->
+        <div class="fairness-card">
+          <div class="subsection-label">F1-score by WHO-UMC category</div>
+
+          <div class="f1-row">
+            <div class="f1-label">Certain</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val good">0.91</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Probable / Likely</div>
+            <div class="f1-track">
+              <div class="f1-fill terracotta" style="width:97%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val">0.81</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Possible</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:90%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val good">0.75</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Unlikely</div>
+            <div class="f1-track">
+              <div class="f1-fill warn" style="width:83%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val warn">0.68</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Conditional</div>
+            <div class="f1-track">
+              <div class="f1-fill warn" style="width:76%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val warn">0.62</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Unassessable</div>
+            <div class="f1-track">
+              <div class="f1-fill danger" style="width:62%"></div>
+              <div class="f1-ref" style="left:97%"></div>
+            </div>
+            <div class="f1-val danger">0.51</div>
+          </div>
+
+          <div class="alert-red">
+            <strong>Unassessable category underperforms</strong>
+            Inherently ambiguous cases are harder to classify. Additional annotation guidelines recommended.
+          </div>
+        </div>
+
+      </div><!-- /fairness-grid -->
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- TAB 2 — DRIFT MONITORING                         -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-drift">
+    <div class="tab-content">
+      <div class="section-title">Model drift monitoring</div>
+      <div class="section-sub">Monthly Cohen's Kappa stability · Threshold: κ &lt; 0.65 triggers retraining review · Model v1.4.2 active</div>
+
+      <div class="drift-summary">
+        <div class="drift-sum-card">
+          <div class="drift-sum-label">Current Kappa</div>
+          <div class="drift-sum-val" style="color:var(--c-green-50)">0.71</div>
+          <div class="drift-sum-sub">↑ Post-retraining Feb 2025</div>
+        </div>
+        <div class="drift-sum-card">
+          <div class="drift-sum-label">Retraining events</div>
+          <div class="drift-sum-val">2</div>
+          <div class="drift-sum-sub">In last 12 months</div>
+        </div>
+        <div class="drift-sum-card">
+          <div class="drift-sum-label">Next scheduled check</div>
+          <div class="drift-sum-val" style="font-size:16px;padding-top:4px">May 2025</div>
+          <div class="drift-sum-sub">Monthly cadence · Auto-triggered</div>
+        </div>
+      </div>
+
+      <div class="subsection-label">Monthly performance timeline — Oct 2024 → Apr 2025</div>
+      <div class="drift-timeline">
+
+        <div class="drift-row">
+          <div class="drift-month">Oct 2024</div>
+          <div class="drift-kappa good">κ = 0.73</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+          </div>
+          <div><span class="drift-event stable">Stable</span><div class="drift-status" style="margin-top:4px">All metrics within threshold</div></div>
+        </div>
+
+        <div class="drift-row">
+          <div class="drift-month">Nov 2024</div>
+          <div class="drift-kappa good">κ = 0.72</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+          </div>
+          <div><span class="drift-event stable">Stable</span><div class="drift-status" style="margin-top:4px">Minor -0.01 decrease, within range</div></div>
+        </div>
+
+        <div class="drift-row">
+          <div class="drift-month">Dec 2024</div>
+          <div class="drift-kappa warn">κ = 0.68</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot warn"></div>
+            <div class="drift-dot empty"></div>
+          </div>
+          <div><span class="drift-event flagged">Minor drift</span><div class="drift-status" style="margin-top:4px">-0.04 drop detected · Monitoring increased</div></div>
+        </div>
+
+        <div class="drift-row">
+          <div class="drift-month">Jan 2025</div>
+          <div class="drift-kappa danger">κ = 0.64</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot warn"></div>
+            <div class="drift-dot danger"></div>
+          </div>
+          <div><span class="drift-event flagged">Drift detected</span><div class="drift-status" style="margin-top:4px">Below 0.65 threshold · Retraining triggered</div></div>
+        </div>
+
+        <div class="drift-row">
+          <div class="drift-month">Feb 2025</div>
+          <div class="drift-kappa good">κ = 0.71</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+          </div>
+          <div><span class="drift-event retrained">Retrained → v1.4.2</span><div class="drift-status" style="margin-top:4px">+0.07 improvement · New VigiBase data Q4 2024</div></div>
+        </div>
+
+        <div class="drift-row">
+          <div class="drift-month">Mar 2025</div>
+          <div class="drift-kappa good">κ = 0.72</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+          </div>
+          <div><span class="drift-event stable">Stable</span><div class="drift-status" style="margin-top:4px">Post-retraining performance holding</div></div>
+        </div>
+
+        <div class="drift-row">
+          <div class="drift-month">Apr 2025</div>
+          <div class="drift-kappa good">κ = 0.71</div>
+          <div class="drift-dots">
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot ok"></div>
+            <div class="drift-dot empty"></div>
+          </div>
+          <div><span class="drift-event stable">Stable</span><div class="drift-status" style="margin-top:4px">Current · Next check: May 2025</div></div>
+        </div>
+
+      </div>
+
+      <div class="alert-green mt-24">
+        ✓ Current model is stable. No retraining required at this time. Next scheduled drift check: <strong>May 15, 2025</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- TAB 3 — AUDIT LOG                                -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-audit">
+    <div class="tab-content">
+      <div class="section-title">
+        Immutable audit log
+        <span class="immutable-badge">🔒 Tamper-proof</span>
+      </div>
+      <div class="section-sub">Complete record of all assessor decisions · Every confirm and override logged with timestamp, assessor ID, reasoning, and case reference</div>
+
+      <div class="audit-controls">
+        <input class="audit-search" placeholder="Search case ID, assessor, or drug..." oninput="searchAudit(this.value)" />
+        <div style="display:flex;align-items:center;gap:var(--sp-8);">
+          <select class="audit-search" style="width:auto;" onchange="filterAudit(this.value)">
+            <option value="all">All actions</option>
+            <option value="confirm">Confirmed only</option>
+            <option value="override">Overrides only</option>
+          </select>
+          <button class="export-btn" onclick="exportAudit()">Export CSV ↓</button>
+        </div>
+      </div>
+
+      <table class="audit-table" id="audit-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Case ID</th>
+            <th>Drug / Event</th>
+            <th>AI prediction</th>
+            <th>→</th>
+            <th>Final decision</th>
+            <th>Action</th>
+            <th>Assessor</th>
+            <th>Reasoning excerpt</th>
+          </tr>
+        </thead>
+        <tbody id="audit-body">
+          <tr data-action="confirm">
+            <td class="ts-cell">15 Apr 02:32</td>
+            <td class="case-cell">ICSR-08841</td>
+            <td>Metformin / Lactic acidosis</td>
+            <td class="pred-cell">Probable (81%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Probable</b></td>
+            <td><span class="action-pill action-confirm">✓ Confirmed</span></td>
+            <td class="assessor-cell">N. Al-Rashidi</td>
+            <td class="reasoning-excerpt">"Strong dechallenge evidence supports AI result"</td>
+          </tr>
+          <tr data-action="confirm">
+            <td class="ts-cell">15 Apr 02:18</td>
+            <td class="case-cell">ICSR-08840</td>
+            <td>Amoxicillin / Anaphylaxis</td>
+            <td class="pred-cell">Certain (94%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Certain</b></td>
+            <td><span class="action-pill action-confirm">✓ Confirmed</span></td>
+            <td class="assessor-cell">N. Al-Rashidi</td>
+            <td class="reasoning-excerpt">"Classic IgE-mediated reaction, timing conclusive"</td>
+          </tr>
+          <tr data-action="override">
+            <td class="ts-cell">15 Apr 01:51</td>
+            <td class="case-cell">ICSR-08837</td>
+            <td>Atorvastatin / Myopathy</td>
+            <td class="pred-cell">Probable (76%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Possible</b></td>
+            <td><span class="action-pill action-override">↺ Override</span></td>
+            <td class="assessor-cell">S. Al-Ghamdi</td>
+            <td class="reasoning-excerpt">"Concurrent exercise history not captured in model"</td>
+          </tr>
+          <tr data-action="confirm">
+            <td class="ts-cell">15 Apr 01:30</td>
+            <td class="case-cell">ICSR-08835</td>
+            <td>Ramipril / Dry cough</td>
+            <td class="pred-cell">Possible (68%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Possible</b></td>
+            <td><span class="action-pill action-confirm">✓ Confirmed</span></td>
+            <td class="assessor-cell">S. Al-Ghamdi</td>
+            <td class="reasoning-excerpt">"ACE inhibitor cough well-documented, agree"</td>
+          </tr>
+          <tr data-action="confirm">
+            <td class="ts-cell">15 Apr 00:55</td>
+            <td class="case-cell">ICSR-08831</td>
+            <td>Clozapine / Agranulocytosis</td>
+            <td class="pred-cell">Certain (97%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Certain</b></td>
+            <td><span class="action-pill action-confirm">✓ Confirmed</span></td>
+            <td class="assessor-cell">N. Al-Rashidi</td>
+            <td class="reasoning-excerpt">"Clozapine-induced agranulocytosis confirmed by labs"</td>
+          </tr>
+          <tr data-action="override">
+            <td class="ts-cell">14 Apr 22:14</td>
+            <td class="case-cell">ICSR-08828</td>
+            <td>Furosemide / Hypokalemia</td>
+            <td class="pred-cell">Certain (88%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Probable</b></td>
+            <td><span class="action-pill action-override">↺ Override</span></td>
+            <td class="assessor-cell">H. Al-Otaibi</td>
+            <td class="reasoning-excerpt">"Patient also on laxatives, alternative cause exists"</td>
+          </tr>
+          <tr data-action="override">
+            <td class="ts-cell">14 Apr 20:03</td>
+            <td class="case-cell">ICSR-08822</td>
+            <td>Omeprazole / Hypomagnesemia</td>
+            <td class="pred-cell">Conditional (52%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Possible</b></td>
+            <td><span class="action-pill action-override">↺ Override</span></td>
+            <td class="assessor-cell">N. Al-Rashidi</td>
+            <td class="reasoning-excerpt">"Long-term PPI use, mechanism well-established"</td>
+          </tr>
+          <tr data-action="confirm">
+            <td class="ts-cell">14 Apr 18:40</td>
+            <td class="case-cell">ICSR-08819</td>
+            <td>Amlodipine / Peripheral edema</td>
+            <td class="pred-cell">Probable (83%)</td>
+            <td class="arrow-cell">→</td>
+            <td><b>Probable</b></td>
+            <td><span class="action-pill action-confirm">✓ Confirmed</span></td>
+            <td class="assessor-cell">S. Al-Ghamdi</td>
+            <td class="reasoning-excerpt">"Bilateral edema onset consistent with CCB mechanism"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- TAB 4 — RETRAINING HISTORY                       -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-retrain">
+    <div class="tab-content">
+      <div class="section-title">Model retraining history</div>
+      <div class="section-sub">Version timeline · Trigger reasons · Performance deltas · FDA GMLP documentation</div>
+
+      <div class="retrain-timeline">
+
+        <div class="retrain-item">
+          <div class="retrain-date">Feb 14, 2025</div>
+          <div>
+            <span class="retrain-badge current">● Current — v1.4.2</span>
+            <div class="retrain-version">Model v1.4.2</div>
+            <div class="retrain-trigger">Trigger: Kappa dropped to 0.64 in Jan 2025 — below 0.65 threshold. VigiBase Q4 2024 data integrated. Sub-Saharan Africa data augmentation applied.</div>
+            <div class="retrain-deltas">
+              <div class="retrain-delta"><span class="key">Cohen's κ</span><span class="val up">0.64 → 0.71 (+0.07)</span></div>
+              <div class="retrain-delta"><span class="key">F1 overall</span><span class="val up">0.74 → 0.79 (+0.05)</span></div>
+              <div class="retrain-delta"><span class="key">Training cases</span><span class="val up">142,000 → 168,000</span></div>
+              <div class="retrain-delta"><span class="key">Override rate</span><span class="val up">21% → 16%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="retrain-item">
+          <div class="retrain-date">Sep 3, 2024</div>
+          <div>
+            <span class="retrain-badge drift">↺ Drift triggered — v1.4.1</span>
+            <div class="retrain-version">Model v1.4.1</div>
+            <div class="retrain-trigger">Trigger: Scheduled quarterly retraining. VigiBase Q2 2024 data. Improved NLP pipeline with BioBERT fine-tuning on ICSR narratives.</div>
+            <div class="retrain-deltas">
+              <div class="retrain-delta"><span class="key">Cohen's κ</span><span class="val up">0.69 → 0.73 (+0.04)</span></div>
+              <div class="retrain-delta"><span class="key">F1 overall</span><span class="val up">0.76 → 0.78 (+0.02)</span></div>
+              <div class="retrain-delta"><span class="key">Training cases</span><span class="val up">118,000 → 142,000</span></div>
+              <div class="retrain-delta"><span class="key">NLP accuracy</span><span class="val up">71% → 79%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="retrain-item">
+          <div class="retrain-date">Mar 15, 2024</div>
+          <div>
+            <span class="retrain-badge scheduled">◎ Scheduled — v1.4.0</span>
+            <div class="retrain-version">Model v1.4.0</div>
+            <div class="retrain-trigger">Trigger: Scheduled quarterly retraining. MedDRA v27.0 dictionary update. SHAP explainability module integrated. Fairness evaluation framework added.</div>
+            <div class="retrain-deltas">
+              <div class="retrain-delta"><span class="key">Cohen's κ</span><span class="val up">0.65 → 0.69 (+0.04)</span></div>
+              <div class="retrain-delta"><span class="key">F1 overall</span><span class="val up">0.72 → 0.76 (+0.04)</span></div>
+              <div class="retrain-delta"><span class="key">Training cases</span><span class="val up">95,000 → 118,000</span></div>
+              <div class="retrain-delta"><span class="key">SHAP added</span><span class="val up">New feature</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="retrain-item">
+          <div class="retrain-date">Oct 1, 2023</div>
+          <div>
+            <span class="retrain-badge initial">◉ Initial release — v1.0.0</span>
+            <div class="retrain-version">Model v1.0.0</div>
+            <div class="retrain-trigger">Initial model release. Trained on VigiBase 2019–2023 data (Saudi Arabia, GCC focus). Random Forest + BioBERT hybrid architecture. Baseline WHO-UMC classification.</div>
+            <div class="retrain-deltas">
+              <div class="retrain-delta"><span class="key">Cohen's κ</span><span class="val">0.62 (baseline)</span></div>
+              <div class="retrain-delta"><span class="key">F1 overall</span><span class="val">0.70 (baseline)</span></div>
+              <div class="retrain-delta"><span class="key">Training cases</span><span class="val">72,000</span></div>
+              <div class="retrain-delta"><span class="key">Architecture</span><span class="val">RF + BioBERT</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert-green mt-24">
+        ✓ All retraining events documented per FDA Good Machine Learning Practice (GMLP) guidelines. Full audit trail available for regulatory inspection.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <div>CausalityAI v1.4.2 · WHO–UMC Causality Assessment Engine · SFDA</div>
+    <div class="footer-model">VigiBase Q1 2025 · FDA GMLP compliant · Fairness threshold F1 ≥ 0.65</div>
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(name, el) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('panel-' + name).classList.add('active');
+    }
+
+    // Audit log search
+    function searchAudit(val) {
+      const rows = document.querySelectorAll('#audit-body tr');
+      const q = val.toLowerCase();
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+
+    // Audit log filter
+    function filterAudit(val) {
+      const rows = document.querySelectorAll('#audit-body tr');
+      rows.forEach(row => {
+        const action = row.getAttribute('data-action');
+        if (val === 'all') { row.style.display = ''; return; }
+        row.style.display = (action === val) ? '' : 'none';
+      });
+    }
+
+    // Export
+    function exportAudit() {
+      alert('Exporting audit log as CSV...\n\nFile: CausalityAI_AuditLog_Apr2025.csv\nRows: 8 decisions\nFormat: Timestamp, Case ID, Drug, Event, AI Prediction, Final Decision, Action, Assessor, Reasoning');
+    }
+  </script>
+
+</body>
+</html>
