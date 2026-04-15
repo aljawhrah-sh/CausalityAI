@@ -1086,18 +1086,52 @@
     }
 
     // ── Run AI Assessment ──
-    function runAssessment() {
-      const drug  = document.getElementById('drug-name').value.trim();
+    //async to wait for python api
+    async function runAssessment() {
+      //get data from the user 
+      const drug = document.getElementById('drug-name').value.trim();
       const onset = document.getElementById('time-onset').value.trim();
-      const age   = document.getElementById('age').value.trim();
-      if (!drug || !onset || !age) {
+      const age = document.getElementById('age').value.trim();
+      const narrative = document.getElementById('narrative').value.trim();
+
+      //if any is empty stop and show alert
+      if(!drug || !onset || !age){
         document.getElementById('narrative-alert').classList.add('visible');
-        document.getElementById('narrative-alert').querySelector('strong').textContent = 'Required fields missing';
-        document.getElementById('narrative-alert').querySelector('strong').nextSibling.textContent
-          = ' Please fill in patient age, suspect drug, and time to onset before running the AI assessment.';
         document.getElementById('narrative-alert').style.display = 'block';
-        return;
+        return
       }
+      //check which button is selected then convert into a word positive, negative,...
+      const dechallenge = document.querySelector('.toggle-btn.active-pos') ? 'positive':
+                          document.querySelector('.toggle-btn.active-neg') ? 'negative' : 'unknown';
+      
+      //show text on button after clicking it Analysing... & disable it so the user can't click multiple times while loading
+      const btn = document.getElementById('run-btn');
+      btn.textContent = 'Analysing...';
+      btn.disabled = true;
+
+      //SEND DATA TO PYTHON
+      const response = await fetch('/api/assess',{
+        method: 'POST',
+        headers: {'Content-type': 'application/json'},
+        body: JSON.stringify({
+            drug_name: drug,
+            time_to_onset: onset,
+            dechallenge: dechallenge,
+            alternative_cause: document.getElementById('drug-name').value,
+            narrative: narrative,
+            age: document.getElementById('age').value.trim(),
+            sex: document.getElementById('sex').value,
+            region: document.getElementById('region').value,
+            reporter: document.getElementById('reporter').value
+        })
+      });
+    
+      //READ python response then convert to JS object ex: {category: 'possible', confidence: 92, score: 6}
+      const result = await response.json();
+
+      //save the result
+      sessionStorage.setItem('assessment', JSON.stringify(result));
+      //redirect to result screen 
       window.location.href = '/screens/01-ai-result.html';
     }
 

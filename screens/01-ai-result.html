@@ -967,6 +967,39 @@
   </div>
 
   <script>
+
+    //read result from python that was stored in sessionsStorage() from screen02
+    function loadAssessmentResult(){
+      const stored = sessionStorage.getItem('assessment');
+
+      if(!stored) return;
+
+      const result = JSON.parse(stored);
+
+      //updating verdict card
+      //update the category
+      document.querySelector('.verdict-category').textContent = result.category;
+      //update confidence percentage
+      document.querySelector('.conf-num').textContent = result.confidence + '%';
+      //update subtitle
+      document.querySelector('.verdict-sub').textContent = 'Score: ' + result.score + '.Model v1.4.2 trained on VigiBase';
+
+      //updating case header chips
+      const chips = document.querySelectorAll('.case-chip');
+      if (chips[0]) chips[0].textContent = result.drug;
+      if(chips[2]) chips[2].textContent = result.patient.sex + ', ' + result.patient.age + 'y';
+      if(chips[3]) chips[3].textContent = result.patient.region;
+
+      //updating case summmary panel
+      const rows = document.querySelectorAll('.summary-val');
+      if(rows[1]) rows[1].textContent = result.drug;
+      if(rows[4]) rows[4].textContent = result.time_to_onset;
+      if(rows[7]) rows[7].textContent = result.patient.reporter;
+
+    }
+
+    loadAssessmentResult();
+
     function selectOpt(el) {
       document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');

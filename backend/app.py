@@ -28,6 +28,10 @@ def assess():
     time_to_onset = data.get('time_to_onset', '')
     alternative = data.get('alternative_cause', '')
     narrative = data.get('narrative', '')
+    age = data.get('age', '')
+    sex = data.get('sex', '')
+    region = data.get('region', '')
+    reporter = data.get('reporter', '')
 
     score = 0
     if dechallenge == 'positive':
@@ -61,7 +65,15 @@ def assess():
     return jsonify({
         'category': category,
         'confidence' : confidence,
-        'score' : score
+        'score' : score,
+        'patient':{
+            'age': age,
+            'sex': sex,
+            'region': region,
+            'reporter': reporter
+        },
+        'drug': data.get('drug_name', ''),
+        'time_to_onset': data.get('time_to_onset', '')
     })
 
 #debug ture -> server restart automatically, port 5000 -> run http://127.0.0.1:5000
