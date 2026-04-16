@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify
 import os
+import database
 
 app = Flask(__name__)
 
@@ -62,7 +63,21 @@ def assess():
         category = 'Unassessable'
         confidence = 20
 
+    case_id = database.save_case(
+        drug = data.get('drug_name', ''),
+        age = age,
+        sex = sex,
+        region = region,
+        time_onset = time_to_onset,
+        dechallenge = dechallenge,
+        narrative = narrative,
+        category = category,
+        confidence = confidence,
+        score = score
+    )
+
     return jsonify({
+        'case_id': case_id,
         'category': category,
         'confidence' : confidence,
         'score' : score,
@@ -78,5 +93,6 @@ def assess():
 
 #debug ture -> server restart automatically, port 5000 -> run http://127.0.0.1:5000
 if __name__ == '__main__':
+    database.create_tables()
     app.run(debug=True, port=5000)
 
