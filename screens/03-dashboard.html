@@ -370,6 +370,52 @@
     function filterTable(cat){const rows=document.querySelectorAll('#queue-body tr');let count=0;rows.forEach(row=>{const rc=row.getAttribute('data-cat');if(cat==='all'||rc===cat){row.style.display='';count++;}else{row.style.display='none';}});document.getElementById('queue-count').textContent=count+' cases';}
     function searchTable(val){const rows=document.querySelectorAll('#queue-body tr');let count=0;const q=val.toLowerCase();rows.forEach(row=>{const text=row.textContent.toLowerCase();if(text.includes(q)){row.style.display='';count++;}else{row.style.display='none';}});document.getElementById('queue-count').textContent=count+' cases';}
     function sortTable(col){const tbody=document.getElementById('queue-body');const rows=Array.from(tbody.querySelectorAll('tr'));const ths=document.querySelectorAll('.data-table th');ths.forEach((th,i)=>{th.classList.remove('sorted');th.querySelector('.sort-icon').textContent='↕';});ths[col].classList.add('sorted');ths[col].querySelector('.sort-icon').textContent='↓';rows.sort((a,b)=>{const aT=a.cells[col]?a.cells[col].textContent.trim():'';const bT=b.cells[col]?b.cells[col].textContent.trim():'';return aT.localeCompare(bT);});rows.forEach(r=>tbody.appendChild(r));}
+    async function loadCasesFromDatabase() {
+      const response = await fetch('/api/cases');
+      const cases = await response.json();
+
+      if (cases.lenght === 0) return;
+
+      const tbody = document.getElementById('queue-body');
+      tbody.innerHTML = '';
+
+      cases.forEach(c => {
+        const row = `
+        <tr data-cat="${c.category.toLowerCase().split('/')[0].trim()}">
+            <td><div class="case-id-cell">ICSR-0${c.id}</div></td>
+            <td><div class="drug-cell">${c.drug}</div></td>
+            <td><span class="cat-pill cat-${getCatClass(c.category)}">${c.category}</span></td>
+            <td>
+                <div class="conf-wrap">
+                    <div class="conf-bar-bg">
+                        <div class="conf-bar-fill" style="width:${c.confidence}%;background:var(--w-terracotta)"></div>
+                    </div>
+                    <div class="conf-val">${c.confidence}%</div>
+                </div>
+            </td>
+            <td>${c.sex} · ${c.age}y</td>
+            <td>Physician</td>
+            <td>${c.created_at.split(' ')[0]}</td>
+            <td><a class="open-btn" href="/screens/01-ai-result.html">Open →</a></td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+
+      document.getElementById('queue-count').textContent = cases.lenght = ' cases';
+
+    }
+
+    function getCatClass(category){
+      if(category.includes('Certain')) return 'certain';
+      if(category.includes('Probable')) return 'probable';
+      if(category.includes('Possible')) return 'possible';
+      if(category.includes('Unlikely')) return 'unlikely';
+      if(category.includes('Conditional')) return 'cond';
+      return 'unassess';
+    }
+
+    loadCasesFromDatabase();
+
   </script>
 </body>
 </html>

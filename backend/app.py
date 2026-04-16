@@ -107,7 +107,13 @@ def decision():
         'seccess': True,
         'message': 'Decision logged successfully'
     })
-#debug ture -> server restart automatically, port 5000 -> run http://127.0.0.1:5000
+
+@app.route('/api/cases', methods=['GET'])
+def get_cases():
+    cases = database.get_cases()
+    return jsonify(cases)
+
+#debug true -> server restart automatically, port 5000 -> run http://127.0.0.1:5000
 if __name__ == '__main__':
     database.create_tables()
     app.run(debug=True, port=5000)

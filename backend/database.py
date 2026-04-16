@@ -72,3 +72,33 @@ def save_decision(case_id, assessor, action, final_cat, reasoning):
     
     conn.commit()
     conn.close()
+
+def get_cases():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT id, drug, age, sex, region, time_onset, dechallenge, category, confidence, created_at
+        FROM cases
+        ORDER BY created_at DESC  
+        ''')
+    
+    rows = cursor.fetchall()
+    conn.close()
+
+    cases = []
+    for row in rows:
+        cases.append({
+            'id': row[0],
+            'drug': row[1],
+            'age': row[2],
+            'sex': row[3],
+            'region': row[4],
+            'time_onset': row[5],
+            'dechallenge': row[6],
+            'category': row[7],
+            'confidence': row[8],
+            'created_at': row[9]
+        })
+
+    return cases
