@@ -91,6 +91,22 @@ def assess():
         'time_to_onset': data.get('time_to_onset', '')
     })
 
+@app.route('/api/decision', methods=['POST'])
+def decision():
+    data = request.get_json()
+
+    case_id = data.get('case_id', 0)
+    assessor = data.get('assessor', 'N A')
+    action = data.get('action', '')
+    final_cat = data.get('final_cat', '')
+    reasoning = data.get('reasoning', '')
+
+    database.save_decision(case_id, assessor, action, final_cat, reasoning)
+
+    return jsonify({
+        'seccess': True,
+        'message': 'Decision logged successfully'
+    })
 #debug ture -> server restart automatically, port 5000 -> run http://127.0.0.1:5000
 if __name__ == '__main__':
     database.create_tables()

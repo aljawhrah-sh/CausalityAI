@@ -59,3 +59,16 @@ def save_case(drug, age, sex, region, time_onset, dechallenge, narrative, catego
     conn.close()
 
     return case_id
+
+def save_decision(case_id, assessor, action, final_cat, reasoning):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        INSERT INTO decisions
+        (case_id, assessor, action, final_cat, reasoning)
+        VALUES(?,?,?,?,?)
+        ''',(case_id, assessor, action, final_cat, reasoning))
+    
+    conn.commit()
+    conn.close()

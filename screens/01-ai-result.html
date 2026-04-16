@@ -1005,7 +1005,7 @@
       el.classList.add('selected');
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
       const reasoning = document.getElementById('reasoning').value.trim();
       const selected  = document.querySelector('.opt.selected .opt-label').textContent;
       if (!reasoning) {
@@ -1013,8 +1013,26 @@
         document.getElementById('reasoning').focus();
         return;
       }
+      
+      const stored = sessionStorage.getItem('assessment');
+      const result = stored ? JSON.parse(stored) : {};
+
+      await fetch('/api/decision',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          case_id: result.case_id || 0,
+          assessor: 'N A',
+          action: selected.includes('Confirm') ? 'confirmed' : 'overridden',
+          final_cat: selected,
+          reasoning: reasoning
+        })
+      });
+
       document.getElementById('reasoning').style.borderBottomColor = '#24a148';
-      alert(`Decision logged.\n\n${selected}\n\nCase ICSR-2024-08841 submitted to audit trail.`); setTimeout(() => { window.location.href = '/screens/03-dashboard.html'; }, 500);
+      alert('Decision logged successfully.\n\nRedirecting to dashboard...');
+      setTimeout(() => {window.location.href = '/screens/03-dashboard.html'; }, 500);
+
     }
   </script>
 
