@@ -104,7 +104,7 @@ def decision():
     database.save_decision(case_id, assessor, action, final_cat, reasoning)
 
     return jsonify({
-        'seccess': True,
+        'success': True,
         'message': 'Decision logged successfully'
     })
 
@@ -112,6 +112,46 @@ def decision():
 def get_cases():
     cases = database.get_cases()
     return jsonify(cases)
+
+@app.route('/api/stats', methods=['GET'])
+def get_stats():
+    import sqlite3
+    conn = sqlite3.connect(database.DB_PATH)
+    cursor = conn.cursor()
+
+    #total cases in queue
+    cursor.execute('SELECT COUNT(*) FROM cases')
+    total_cases = cursor.fetchone()[0]
+
+    #Cases that are completed today
+    cursor.execute(''' SELECT COUNT(*) FROM decisions WHERE DATE(decided_at) = DATE('now')''')
+    completed_today = cursor.fetchone()[0]
+
+    #confirmed cases vs overriden cases
+    cursor.execute("SELECT COUNT(*) FROM decisions WHERE action = 'confirmed'")
+    confirmed = cursor.fetchone()[0]
+
+    cursor.execute('SELECT COUNT(*) FROM decisions')
+    total_decisions = cursor.fetchone()[0]
+
+    #counts for category
+    cursor.execute(''' SELECT category, COUNT(*) FROM cases GROUP BY category''')
+    category_rows = cursor.fetchall()
+    categories = {}
+    for row in category_rows:
+        categories[row[0]] = row[1]
+
+    conn.close()
+
+    #agreement rounding calculation
+    agreement = round((confirmed / total_decisions * 100)) if total_decisions > 0 else 0
+
+    return jsonify({
+        'total_cases': total_cases,
+        'completed_today': completed_today,
+        'agreement_rate': agreement,
+        'categories': categories
+    })
 
 #debug true -> server restart automatically, port 5000 -> run http://127.0.0.1:5000
 if __name__ == '__main__':
