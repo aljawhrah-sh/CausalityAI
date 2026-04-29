@@ -974,12 +974,12 @@
 
         <!-- Reasoning -->
         <label class="reasoning-label" for="reasoning">
-          Assessor reasoning <span style="color:var(--c-red-60)">*</span>
+        Assessor reasoning <span style="color:var(--w-stone-gray);font-size:11px">(optional)</span>
         </label>
         <textarea
           id="reasoning"
           class="reasoning-box"
-          placeholder="Document clinical reasoning for confirm or override. Required for audit trail..."
+          placeholder="Optionally document your clinical reasoning for the audit trail..."
           rows="4"
         ></textarea>
 
@@ -1018,12 +1018,7 @@
     function handleSubmit() {
       const reasoning = document.getElementById('reasoning').value.trim();
       const selected  = document.querySelector('.opt.selected .opt-label').textContent;
-      if (!reasoning) {
-        document.getElementById('reasoning').style.borderBottomColor = '#da1e28';
-        document.getElementById('reasoning').focus();
-        return;
-      }
-      document.getElementById('reasoning').style.borderBottomColor = '#24a148';
+      
       alert(`Decision logged.\n\n${selected}\n\nCase ICSR-2024-08841 submitted to audit trail.`); setTimeout(() => { window.location.href = '03-dashboard.html'; }, 500);
     }
   </script>
