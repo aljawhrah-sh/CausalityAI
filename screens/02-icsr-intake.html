@@ -3,61 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CausalityAI — ICSR Intake Form</title>
+  <title>CausalityAI — ICSR Bulk Upload</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ─── HYBRID TOKENS ─────────────────────────────────────────────── */
     :root {
-      --c-blue:         #0f62fe;
-      --c-blue-hover:   #0353e9;
-      --c-gray-100:     #161616;
-      --c-gray-90:      #262626;
-      --c-gray-80:      #393939;
-      --c-gray-70:      #525252;
-      --c-gray-60:      #6f6f6f;
-      --c-gray-30:      #c6c6c6;
-      --c-gray-20:      #e0e0e0;
-      --c-gray-10:      #f4f4f4;
-      --c-green-50:     #24a148;
-      --c-red-60:       #da1e28;
-      --c-yellow-30:    #f1c21b;
-
-      --w-parchment:    #f5f4ed;
-      --w-ivory:        #faf9f5;
-      --w-terracotta:   #c96442;
-      --w-coral:        #d97757;
-      --w-near-black:   #141413;
-      --w-olive-gray:   #5e5d59;
-      --w-stone-gray:   #87867f;
-      --w-charcoal:     #4d4c48;
-      --w-border-cream: #f0eee6;
-      --w-border-warm:  #e8e6dc;
-      --w-warm-sand:    #e8e6dc;
-      --w-dark-surf:    #30302e;
-      --w-warm-silver:  #b0aea5;
-
-      --l-indigo:       #5e6ad2;
-      --l-violet:       #7170ff;
-
-      --p-sage-border:  #bfc1b7;
-      --p-orange:       #F54E00;
-      --p-sage-cream:   #eeefe9;
-
-      --s-lime:         #c2ef4e;
-      --s-purple:       #1f1633;
-
+      --c-blue:        #0f62fe;
+      --c-gray-10:     #f4f4f4;
+      --c-gray-20:     #e0e0e0;
+      --c-gray-30:     #c6c6c6;
+      --c-gray-60:     #6f6f6f;
+      --c-green-50:    #24a148;
+      --c-red-60:      #da1e28;
+      --c-yellow-30:   #f1c21b;
+      --w-parchment:   #f5f4ed;
+      --w-ivory:       #faf9f5;
+      --w-terracotta:  #c96442;
+      --w-coral:       #d97757;
+      --w-near-black:  #141413;
+      --w-olive-gray:  #5e5d59;
+      --w-stone-gray:  #87867f;
+      --w-charcoal:    #4d4c48;
+      --w-border-cream:#f0eee6;
+      --w-border-warm: #e8e6dc;
+      --w-warm-sand:   #e8e6dc;
+      --w-dark-surf:   #30302e;
+      --w-warm-silver: #b0aea5;
+      --l-indigo:      #5e6ad2;
+      --p-sage-border: #bfc1b7;
+      --s-lime:        #c2ef4e;
       --font-serif:  Georgia, serif;
       --font-sans:   'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
       --font-mono:   'IBM Plex Mono', 'Menlo', monospace;
-      --font-ui:     'Inter', system-ui, sans-serif;
-
-      --sp-2:2px; --sp-4:4px; --sp-8:8px; --sp-12:12px;
-      --sp-16:16px; --sp-24:24px; --sp-32:32px; --sp-48:48px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; -webkit-font-smoothing: antialiased; }
     body {
@@ -69,633 +48,334 @@
       flex-direction: column;
     }
 
-    /* ─── TOP NAV ────────────────────────────────────────────────────── */
+    /* NAV */
     .topnav {
-      background: var(--w-near-black);
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--sp-32);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--w-dark-surf);
-      flex-shrink: 0;
+      background: var(--w-near-black); height: 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid var(--w-dark-surf); flex-shrink: 0;
     }
-    .nav-left { display: flex; align-items: center; gap: var(--sp-24); }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
     .nav-logo {
       font-size: 14px; font-weight: 500; color: #fff;
-      display: flex; align-items: center; gap: var(--sp-8);
+      display: flex; align-items: center; gap: 8px;
       letter-spacing: 0.16px; text-decoration: none;
     }
-    .nav-logo-img {
-      height: 30px;
-      width: auto;
-    }
-    .nav-logo-text {
-      font-family: var(--font-sans);
-      font-size: 15px;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: 0.16px;
-    }
-    .nav-logo-text span {
-      color: #f5a623;
-      font-weight: 400;
-    }
+    .nav-logo-img { height: 30px; width: auto; }
+    .nav-logo-text { font-family: var(--font-sans); font-size: 15px; font-weight: 600; color: #fff; letter-spacing: 0.16px; }
+    .nav-logo-text span { color: #f5a623; font-weight: 400; }
     .nav-breadcrumb { font-size: 13px; color: var(--w-warm-silver); letter-spacing: 0.16px; }
     .nav-breadcrumb span { color: var(--c-gray-60); margin: 0 6px; }
-    .nav-right { display: flex; align-items: center; gap: var(--sp-16); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
     .nav-meta { font-size: 12px; color: var(--w-warm-silver); letter-spacing: 0.32px; }
     .nav-avatar {
       width: 28px; height: 28px; border-radius: 50%;
       background: var(--w-terracotta);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 600; color: #fff; letter-spacing: 0.5px;
+      font-size: 11px; font-weight: 600; color: #fff;
     }
 
-    /* ─── STEP BAR ───────────────────────────────────────────────────── */
-    .stepbar {
-      background: var(--w-ivory);
-      border-bottom: 1px solid var(--w-border-cream);
-      padding: 0 var(--sp-32);
-      display: flex;
-      flex-shrink: 0;
-    }
-    .step {
-      font-size: 12px; font-weight: 400;
-      color: var(--w-stone-gray);
-      padding: 10px var(--sp-16);
-      border-bottom: 2px solid transparent;
-      letter-spacing: 0.32px; white-space: nowrap;
-    }
-    .step.done   { color: var(--w-olive-gray); border-bottom-color: var(--p-sage-border); }
-    .step.active { color: var(--w-near-black); border-bottom-color: var(--w-terracotta); font-weight: 500; }
-
-    /* ─── PAGE TITLE BAND ────────────────────────────────────────────── */
-    .page-band {
+    /* PAGE HEADER */
+    .page-header {
       background: var(--w-ivory);
       border-bottom: 1px solid var(--w-border-warm);
-      padding: var(--sp-16) var(--sp-32);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 16px 32px;
+      display: flex; align-items: flex-end; justify-content: space-between;
       flex-shrink: 0;
     }
-    .page-title {
-      font-family: var(--font-serif);
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--w-near-black);
-      line-height: 1.2;
-    }
-    .page-subtitle {
-      font-size: 13px;
-      color: var(--w-stone-gray);
-      margin-top: 3px;
-      letter-spacing: 0.16px;
-    }
-    .draft-badge {
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 24px;
-      background: var(--w-warm-sand);
-      color: var(--w-olive-gray);
-      letter-spacing: 0.32px;
-      font-family: var(--font-mono);
-    }
+    .page-title { font-family: var(--font-serif); font-size: 22px; font-weight: 500; color: var(--w-near-black); }
+    .page-subtitle { font-size: 13px; color: var(--w-stone-gray); margin-top: 3px; letter-spacing: 0.16px; }
 
-    /* ─── MAIN 3-COLUMN LAYOUT ───────────────────────────────────────── */
+    /* MAIN CONTENT */
     .main {
-      display: grid;
-      grid-template-columns: 260px 1fr 280px;
       flex: 1;
-      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
     }
 
-    /* ─── SHARED PANEL STYLES ────────────────────────────────────────── */
-    .panel {
-      padding: var(--sp-24);
-      overflow-y: auto;
-    }
-    .panel-left  { background: var(--w-ivory); border-right: 1px solid var(--w-border-warm); }
-    .panel-center{ background: var(--w-parchment); border-right: 1px solid var(--w-border-warm); }
-    .panel-right { background: var(--w-ivory); }
-
-    /* ─── SECTION HEADERS ────────────────────────────────────────────── */
-    .panel-section-title {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-16);
-      padding-bottom: var(--sp-8);
-      border-bottom: 1px solid var(--w-border-cream);
-    }
-
-    /* ─── IBM CARBON FORM FIELDS ─────────────────────────────────────── */
-    .form-group { margin-bottom: var(--sp-16); }
-
-    .form-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--w-olive-gray);
-      letter-spacing: 0.32px;
-      margin-bottom: var(--sp-4);
-    }
-    .form-label .required { color: var(--c-red-60); margin-left: 2px; }
-
-    /* IBM Carbon signature — bottom border only, no box */
-    .form-input,
-    .form-select,
-    .form-textarea {
+    /* UPLOAD CARD */
+    .upload-card {
+      background: var(--w-ivory);
+      border: 1px solid var(--w-border-warm);
       width: 100%;
-      background: var(--c-gray-10);
-      border: none;
-      border-bottom: 2px solid var(--c-gray-30);
-      padding: 0 var(--sp-16);
-      height: 40px;
-      font-family: var(--font-sans);
-      font-size: 14px;
+      max-width: 680px;
+      padding: 40px;
+    }
+
+    .upload-card-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 500;
       color: var(--w-near-black);
-      letter-spacing: 0.16px;
-      border-radius: 0;
-      outline: none;
-      transition: border-color 0.15s;
-      appearance: none;
-      -webkit-appearance: none;
-    }
-    .form-input:focus,
-    .form-select:focus { border-bottom-color: var(--w-terracotta); }
-    .form-input.error  { border-bottom-color: var(--c-red-60); }
-    .form-input::placeholder { color: var(--c-gray-60); }
-
-    .form-textarea {
-      height: auto;
-      padding: var(--sp-12) var(--sp-16);
-      resize: vertical;
-      min-height: 100px;
-      line-height: 1.6;
-    }
-    .form-textarea:focus { border-bottom-color: var(--w-terracotta); }
-
-    .form-select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235e5d59' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 32px;
-      cursor: pointer;
+      margin-bottom: 4px;
     }
 
-    .form-helper {
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      margin-top: var(--sp-4);
-      letter-spacing: 0.16px;
-    }
-    .form-error {
-      font-size: 11px;
-      color: var(--c-red-60);
-      margin-top: var(--sp-4);
-      letter-spacing: 0.16px;
-      display: none;
-    }
-    .form-group.has-error .form-error { display: block; }
-    .form-group.has-error .form-input  { border-bottom-color: var(--c-red-60); }
-
-    /* ─── RECHALLENGE TOGGLE PAIR ────────────────────────────────────── */
-    .toggle-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--sp-8);
-    }
-    .toggle-btn {
-      padding: var(--sp-8) var(--sp-12);
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--w-olive-gray);
-      background: var(--c-gray-10);
-      border: none;
-      border-bottom: 2px solid var(--c-gray-30);
-      cursor: pointer;
-      letter-spacing: 0.16px;
-      transition: all 0.15s;
-      text-align: left;
-      border-radius: 0;
-    }
-    .toggle-btn:hover { border-bottom-color: var(--p-sage-border); }
-    .toggle-btn.active-pos {
-      background: rgba(36,161,72,0.08);
-      border-bottom-color: var(--c-green-50);
-      color: #155724;
-      font-weight: 500;
-    }
-    .toggle-btn.active-neg {
-      background: rgba(218,30,40,0.06);
-      border-bottom-color: var(--c-red-60);
-      color: var(--c-red-60);
-      font-weight: 500;
-    }
-    .toggle-btn.active-unk {
-      background: rgba(241,194,27,0.08);
-      border-bottom-color: var(--c-yellow-30);
-      color: #7a5c00;
-      font-weight: 500;
-    }
-
-    /* ─── MedDRA TAG INPUT ── Linear pill style ──────────────────────── */
-    .tag-input-wrap {
-      background: var(--c-gray-10);
-      border: none;
-      border-bottom: 2px solid var(--c-gray-30);
-      padding: var(--sp-8) var(--sp-12);
-      min-height: 40px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--sp-4);
-      align-items: center;
-      cursor: text;
-      transition: border-color 0.15s;
-      border-radius: 0;
-    }
-    .tag-input-wrap:focus-within { border-bottom-color: var(--w-terracotta); }
-    .meddra-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 9999px; /* Linear pill */
-      background: rgba(94,106,210,0.10);
-      color: var(--l-indigo);
-      border: 1px solid rgba(94,106,210,0.20);
-      letter-spacing: 0.16px;
-      white-space: nowrap;
-    }
-    .meddra-tag .tag-remove {
-      cursor: pointer;
-      color: var(--l-indigo);
+    .upload-card-sub {
       font-size: 13px;
-      line-height: 1;
-      opacity: 0.6;
-      transition: opacity 0.15s;
-    }
-    .meddra-tag .tag-remove:hover { opacity: 1; }
-    .tag-input-field {
-      border: none;
-      background: transparent;
-      outline: none;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      color: var(--w-near-black);
-      min-width: 120px;
-      flex: 1;
-      letter-spacing: 0.16px;
-    }
-    .tag-input-field::placeholder { color: var(--c-gray-60); }
-
-    /* ─── CONCOMITANT DRUGS ──────────────────────────────────────────── */
-    .drug-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 9999px;
-      background: rgba(201,100,66,0.08);
-      color: var(--w-terracotta);
-      border: 1px solid rgba(201,100,66,0.18);
-      letter-spacing: 0.16px;
-    }
-
-    /* ─── OUTCOME GRID ───────────────────────────────────────────────── */
-    .outcome-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--sp-8);
-    }
-    .outcome-opt {
-      padding: var(--sp-8) var(--sp-12);
-      border: 1px solid var(--w-border-warm);
-      background: #fff;
-      font-size: 12px;
-      color: var(--w-olive-gray);
-      cursor: pointer;
-      letter-spacing: 0.16px;
-      transition: all 0.15s;
-      border-radius: 0;
-      text-align: center;
-    }
-    .outcome-opt:hover   { background: var(--w-warm-sand); border-color: var(--p-sage-border); }
-    .outcome-opt.selected{
-      background: rgba(201,100,66,0.08);
-      border-color: var(--w-terracotta);
-      color: var(--w-near-black);
-      font-weight: 500;
-    }
-
-    /* ─── NARRATIVE PANEL ────────────────────────────────────────────── */
-    .narrative-wrap { position: relative; }
-    .narrative-count {
-      position: absolute;
-      bottom: var(--sp-8);
-      right: var(--sp-12);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      pointer-events: none;
-    }
-
-    /* ─── COMPLETENESS CHECKER ── PostHog style ──────────────────────── */
-    .completeness-card {
-      background: #fff;
-      border: 1px solid var(--w-border-warm);
-      border-radius: 0;
-      padding: var(--sp-16);
-      margin-bottom: var(--sp-24);
-    }
-    .completeness-title {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-12);
-      padding-bottom: var(--sp-8);
-      border-bottom: 1px solid var(--w-border-cream);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .completeness-pct {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--w-terracotta);
-    }
-    .progress-track {
-      height: 4px;
-      background: var(--w-border-cream);
-      border-radius: 0;
-      margin-bottom: var(--sp-12);
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--w-terracotta);
-      border-radius: 0;
-      transition: width 0.4s ease;
-    }
-    .check-item {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--sp-8);
-      padding: 5px 0;
-      font-size: 12px;
-      letter-spacing: 0.16px;
-      border-bottom: 1px solid var(--w-border-cream);
-    }
-    .check-item:last-child { border-bottom: none; }
-    .check-icon {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 1px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9px;
-    }
-    .check-icon.ok  { background: var(--c-green-50); color: #fff; }
-    .check-icon.err { background: var(--c-red-60); color: #fff; }
-    .check-icon.warn{ background: var(--c-yellow-30); color: #7a5c00; }
-    .check-text.ok  { color: var(--w-olive-gray); }
-    .check-text.err { color: var(--c-red-60); font-weight: 500; }
-    .check-text.warn{ color: #7a5c00; }
-
-    /* ─── E2B STANDARDS CARD ─────────────────────────────────────────── */
-    .standards-card {
-      background: #fff;
-      border: 1px solid var(--w-border-warm);
-      padding: var(--sp-16);
-      margin-bottom: var(--sp-24);
-      border-radius: 0;
-    }
-    .standards-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 5px 0;
-      font-size: 12px;
-      border-bottom: 1px solid var(--w-border-cream);
-    }
-    .standards-row:last-child { border-bottom: none; }
-    .standards-key { color: var(--w-stone-gray); letter-spacing: 0.16px; }
-    .standards-val { font-family: var(--font-mono); font-size: 11px; color: var(--w-olive-gray); }
-    .standards-badge {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 24px;
-      font-weight: 500;
-      letter-spacing: 0.16px;
-    }
-    .badge-ok   { background: rgba(36,161,72,0.10); color: #155724; }
-    .badge-warn { background: rgba(241,194,27,0.12); color: #7a5c00; }
-
-    /* ─── MISSING FIELDS ALERT — Sentry style ────────────────────────── */
-    .alert-missing {
-      background: rgba(218,30,40,0.06);
-      border: 1px solid rgba(218,30,40,0.20);
-      border-left: 3px solid var(--c-red-60);
-      padding: var(--sp-12);
-      margin-bottom: var(--sp-16);
-      font-size: 12px;
-      color: var(--c-red-60);
-      line-height: 1.5;
-      letter-spacing: 0.16px;
-      display: none;
-    }
-    .alert-missing.visible { display: block; }
-    .alert-missing strong { font-weight: 600; display: block; margin-bottom: 4px; }
-
-    /* ─── BOTTOM ACTION BAR ──────────────────────────────────────────── */
-    .action-bar {
-      background: var(--w-ivory);
-      border-top: 1px solid var(--w-border-warm);
-      padding: var(--sp-12) var(--sp-32);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .action-left { display: flex; align-items: center; gap: var(--sp-16); }
-    .action-right{ display: flex; align-items: center; gap: var(--sp-12); }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--w-border-warm);
-      color: var(--w-olive-gray);
-      padding: var(--sp-8) var(--sp-16);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.16px;
-      cursor: pointer;
-      border-radius: 0;
-      transition: all 0.15s;
-    }
-    .btn-ghost:hover { background: var(--w-warm-sand); color: var(--w-near-black); }
-
-    .btn-secondary {
-      background: var(--w-warm-sand);
-      border: none;
-      border-bottom: 2px solid var(--p-sage-border);
-      color: var(--w-charcoal);
-      padding: var(--sp-8) var(--sp-16);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.16px;
-      cursor: pointer;
-      border-radius: 0;
-      transition: all 0.15s;
-    }
-    .btn-secondary:hover { background: var(--w-border-warm); }
-
-    .btn-primary {
-      background: var(--w-terracotta);
-      border: none;
-      color: var(--w-ivory);
-      padding: var(--sp-8) var(--sp-24);
-      font-family: var(--font-sans);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.16px;
-      cursor: pointer;
-      border-radius: 0;
-      transition: background 0.15s;
-      display: flex;
-      align-items: center;
-      gap: var(--sp-8);
-    }
-    .btn-primary:hover { background: var(--w-coral); }
-    .btn-primary:disabled {
-      background: var(--c-gray-30);
-      cursor: not-allowed;
-    }
-
-    .action-note {
-      font-size: 11px;
       color: var(--w-stone-gray);
       letter-spacing: 0.16px;
+      margin-bottom: 28px;
     }
 
-    /* ─── DIVIDER ────────────────────────────────────────────────────── */
-    .divider {
-      height: 1px;
-      background: var(--w-border-cream);
-      margin: var(--sp-16) 0;
-    }
-
-    /* ─── FOOTER ─────────────────────────────────────────────────────── */
-    .page-footer {
-      background: var(--w-ivory);
-      border-top: 1px solid var(--w-border-warm);
-      padding: var(--sp-8) var(--sp-32);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.16px;
-      flex-shrink: 0;
-    }
-    .footer-model { font-family: var(--font-mono); font-size: 11px; color: var(--w-stone-gray); }
-
-    /* ─── REPORT UPLOAD ──────────────────────────────────────────────── */
-    .upload-zone {
+    /* DROP ZONE */
+    .drop-zone {
       border: 2px dashed var(--p-sage-border);
-      background: var(--w-ivory);
-      padding: var(--sp-24) var(--sp-16);
+      background: var(--w-parchment);
+      padding: 56px 32px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      border-radius: 0;
       position: relative;
+      margin-bottom: 20px;
     }
-    .upload-zone:hover,
-    .upload-zone.dragover {
+    .drop-zone:hover,
+    .drop-zone.dragover {
       border-color: var(--w-terracotta);
       background: rgba(201,100,66,0.04);
     }
-    .upload-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
+    .drop-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
     }
-    .upload-icon {
-      font-size: 22px;
-      margin-bottom: var(--sp-8);
+    .drop-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .drop-primary {
+      font-size: 15px; font-weight: 500;
+      color: var(--w-olive-gray);
+      margin-bottom: 6px;
+    }
+    .drop-secondary {
+      font-size: 12px;
       color: var(--w-stone-gray);
+      letter-spacing: 0.16px;
     }
-    .upload-primary-text {
+
+    /* FILE INFO */
+    .file-info {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(36,161,72,0.06);
+      border: 1px solid rgba(36,161,72,0.2);
+      margin-bottom: 20px;
       font-size: 13px;
-      font-weight: 500;
+      color: #155724;
+    }
+    .file-info.visible { display: flex; }
+    .file-info-name { flex: 1; font-weight: 500; }
+    .file-info-remove {
+      cursor: pointer; background: none; border: none;
+      color: var(--c-red-60); font-size: 16px; opacity: 0.7;
+      padding: 0; line-height: 1;
+    }
+    .file-info-remove:hover { opacity: 1; }
+
+    /* FORMAT GUIDE */
+    .format-guide {
+      background: var(--c-gray-10);
+      border: 1px solid var(--w-border-cream);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .format-guide-title {
+      font-size: 11px; font-weight: 500;
+      color: var(--w-stone-gray);
+      letter-spacing: 0.32px; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .format-cols {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .format-col {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 8px;
+      background: #fff;
+      border: 1px solid var(--w-border-warm);
       color: var(--w-olive-gray);
       letter-spacing: 0.16px;
-      margin-bottom: var(--sp-4);
     }
-    .upload-secondary-text {
-      font-size: 11px;
-      color: var(--w-stone-gray);
+    .format-col.required {
+      border-color: var(--w-terracotta);
+      color: var(--w-terracotta);
+    }
+
+    /* UPLOAD BUTTON */
+    .upload-actions {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .upload-note {
+      font-size: 12px; color: var(--w-stone-gray); letter-spacing: 0.16px;
+    }
+    .btn-upload {
+      background: var(--w-terracotta);
+      border: none; color: #fff;
+      padding: 10px 28px;
+      font-family: var(--font-sans);
+      font-size: 14px; font-weight: 500;
       letter-spacing: 0.16px;
+      cursor: pointer; border-radius: 0;
+      transition: background 0.15s;
+      display: flex; align-items: center; gap: 8px;
     }
-    .upload-file-info {
+    .btn-upload:hover { background: var(--w-coral); }
+    .btn-upload:disabled { background: var(--c-gray-30); cursor: not-allowed; }
+
+    /* STATUS */
+    .upload-status {
       display: none;
-      margin-top: var(--sp-12);
-      padding: var(--sp-8) var(--sp-12);
-      background: rgba(36,161,72,0.07);
-      border: 1px solid rgba(36,161,72,0.2);
-      font-size: 12px;
-      color: #155724;
+      margin-top: 16px;
+      padding: 12px 16px;
+      font-size: 13px;
       letter-spacing: 0.16px;
-      text-align: left;
-      align-items: center;
-      gap: var(--sp-8);
     }
-    .upload-file-info.visible { display: flex; }
-    .upload-file-name { font-weight: 500; flex: 1; }
-    .upload-file-remove {
-      cursor: pointer;
+    .upload-status.loading {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(94,106,210,0.06);
+      border: 1px solid rgba(94,106,210,0.2);
+      color: var(--l-indigo);
+    }
+    .upload-status.success {
+      display: block;
+      background: rgba(36,161,72,0.06);
+      border: 1px solid rgba(36,161,72,0.2);
+      color: #155724;
+    }
+    .upload-status.error {
+      display: block;
+      background: rgba(218,30,40,0.06);
+      border: 1px solid rgba(218,30,40,0.2);
       color: var(--c-red-60);
-      font-size: 14px;
-      opacity: 0.7;
-      background: none;
-      border: none;
-      padding: 0;
-      line-height: 1;
     }
-    .upload-file-remove:hover { opacity: 1; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(94,106,210,0.3);
+      border-top-color: var(--l-indigo);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* PREVIEW TABLE */
+    .preview-wrap {
+      display: none;
+      margin-top: 32px;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .preview-wrap.visible { display: block; }
+    .preview-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .preview-title {
+      font-family: var(--font-serif);
+      font-size: 16px; font-weight: 500;
+      color: var(--w-near-black);
+    }
+    .preview-count {
+      font-family: var(--font-mono);
+      font-size: 12px; color: var(--w-stone-gray);
+    }
+    .preview-table-wrap {
+      background: var(--w-ivory);
+      border: 1px solid var(--w-border-warm);
+      overflow-x: auto;
+    }
+    .preview-table {
+      width: 100%; border-collapse: collapse;
+    }
+    .preview-table th {
+      font-size: 11px; font-weight: 500;
+      color: var(--w-stone-gray);
+      text-transform: uppercase; letter-spacing: 0.32px;
+      padding: 8px 12px;
+      background: var(--c-gray-10);
+      border-bottom: 1px solid var(--w-border-warm);
+      text-align: left; white-space: nowrap;
+    }
+    .preview-table td {
+      font-size: 12px; color: var(--w-near-black);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--w-border-cream);
+      white-space: nowrap; letter-spacing: 0.16px;
+    }
+    .preview-table tr:last-child td { border-bottom: none; }
+    .preview-table tr { border-left: 3px solid transparent; transition: all 0.12s; }
+    .preview-table tr:hover { background: rgba(201,100,66,0.03); border-left-color: var(--w-terracotta); }
+
+    .cat-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 500;
+      padding: 2px 8px; border-radius: 24px;
+      letter-spacing: 0.16px; white-space: nowrap;
+    }
+    .cat-certain    { background: rgba(36,161,72,0.10); color: #155724; }
+    .cat-probable   { background: rgba(201,100,66,0.10); color: var(--w-terracotta); }
+    .cat-possible   { background: rgba(15,98,254,0.08); color: var(--c-blue); }
+    .cat-unlikely   { background: rgba(241,194,27,0.12); color: #7a5c00; }
+    .cat-cond       { background: rgba(0,0,0,0.06); color: var(--w-stone-gray); }
+    .cat-unassess   { background: rgba(218,30,40,0.08); color: var(--c-red-60); }
+
+    .conf-wrap { display: flex; align-items: center; gap: 6px; }
+    .conf-bar-bg { flex: 1; height: 4px; background: var(--w-border-cream); }
+    .conf-bar-fill { height: 100%; background: var(--w-terracotta); }
+    .conf-val { font-family: var(--font-mono); font-size: 11px; color: var(--w-stone-gray); width: 30px; }
+
+    /* CONFIRM ACTIONS */
+    .confirm-actions {
+      display: none;
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--w-ivory);
+      border: 1px solid var(--w-border-warm);
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      width: 100%;
+    }
+    .confirm-actions.visible { display: flex; }
+    .confirm-note { font-size: 13px; color: var(--w-stone-gray); letter-spacing: 0.16px; }
+    .confirm-note strong { color: var(--w-near-black); }
+    .btn-confirm {
+      background: var(--w-terracotta); border: none; color: #fff;
+      padding: 10px 28px; font-family: var(--font-sans);
+      font-size: 14px; font-weight: 500; letter-spacing: 0.16px;
+      cursor: pointer; border-radius: 0; transition: background 0.15s;
+    }
+    .btn-confirm:hover { background: var(--w-coral); }
+
+    /* FOOTER */
+    .page-footer {
+      background: var(--w-ivory); border-top: 1px solid var(--w-border-warm);
+      padding: 8px 32px; display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; color: var(--w-stone-gray); letter-spacing: 0.16px; flex-shrink: 0;
+    }
+    .footer-model { font-family: var(--font-mono); font-size: 11px; color: var(--w-stone-gray); }
   </style>
 </head>
-
 <body>
 
-  <!-- TOP NAV -->
+  <!-- NAV -->
   <nav class="topnav">
     <div class="nav-left">
       <a class="nav-logo" href="/screens/03-dashboard.html" style="text-decoration:none;color:#fff;">
-        <img class="nav-logo-img" src="data:image/png;base64,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" alt="CausalityAI" />
         <span class="nav-logo-text">Causality<span>AI</span></span>
       </a>
       <div class="nav-breadcrumb">
         <a href="/screens/03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
-        <span>›</span> New ICSR <span>›</span> Intake Form
+        <span>›</span> Bulk ICSR Upload
       </div>
     </div>
     <div class="nav-right">
@@ -705,371 +385,108 @@
     </div>
   </nav>
 
-  <!-- STEP BAR -->
-  <div class="stepbar">
-    <div class="step active">1  Patient data</div>
-    <div class="step">2  Clinical context</div>
-    <a class="step" href="/screens/01-ai-result.html" style="text-decoration:none;">3  AI assessment result</a>
-  </div>
-
-  <!-- PAGE TITLE -->
-  <div class="page-band">
+  <!-- PAGE HEADER -->
+  <div class="page-header">
     <div>
-      <div class="page-title">New Individual Case Safety Report</div>
-      <div class="page-subtitle">Enter patient, drug, and adverse event data · All fields marked * are required by ICH E2B(R3)</div>
+      <div class="page-title">Bulk ICSR Upload</div>
+      <div class="page-subtitle">Upload an Excel file containing multiple ICSR cases · The AI will assess each case automatically · Review before sending to queue</div>
     </div>
-    <div class="draft-badge">DRAFT · Auto-saved 02:24</div>
   </div>
 
-  <!-- MAIN 3-COLUMN -->
+  <!-- MAIN -->
   <div class="main">
 
-    <!-- ── LEFT PANEL — Patient & Reporter ── -->
-    <div class="panel panel-left">
-      <div class="panel-section-title">Patient demographics</div>
+    <!-- UPLOAD CARD -->
+    <div class="upload-card">
+      <div class="upload-card-title">Upload ICSR Excel File</div>
+      <div class="upload-card-sub">Drop your Excel file below or click to browse. All cases will be assessed by the WHO–UMC engine automatically.</div>
 
-      <div class="form-group" id="fg-age">
-        <label class="form-label" for="age">Patient age <span class="required">*</span></label>
-        <input class="form-input" id="age" type="number" min="0" max="120" placeholder="e.g. 54" oninput="updateCompleteness()" />
-        <div class="form-helper">Years at time of adverse event</div>
-        <div class="form-error">Patient age is required</div>
+      <!-- DROP ZONE -->
+      <div class="drop-zone" id="drop-zone"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="handleDrop(event)">
+        <input type="file" id="excel-file" accept=".xlsx,.xls,.csv" onchange="handleSelect(event)" />
+        <span class="drop-icon">📊</span>
+        <div class="drop-primary">Drop Excel file here or click to browse</div>
+        <div class="drop-secondary">Supports .xlsx · .xls · .csv &nbsp;·&nbsp; Max 50 MB</div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="sex">Sex <span class="required">*</span></label>
-        <select class="form-select" id="sex" onchange="updateCompleteness()">
-          <option value="">Select sex</option>
-          <option value="F">Female</option>
-          <option value="M">Male</option>
-          <option value="U">Unknown</option>
-        </select>
+      <!-- FILE INFO -->
+      <div class="file-info" id="file-info">
+        <span>📎</span>
+        <span class="file-info-name" id="file-name">—</span>
+        <button class="file-info-remove" onclick="removeFile()" title="Remove">✕</button>
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="weight">Body weight (kg)</label>
-        <input class="form-input" id="weight" type="number" min="1" max="300" placeholder="e.g. 68" />
+      <!-- FORMAT GUIDE -->
+      <div class="format-guide">
+        <div class="format-guide-title">Expected column headers</div>
+        <div class="format-cols">
+          <span class="format-col required">drug_name *</span>
+          <span class="format-col required">age *</span>
+          <span class="format-col required">sex *</span>
+          <span class="format-col required">time_to_onset *</span>
+          <span class="format-col required">dechallenge *</span>
+          <span class="format-col">region</span>
+          <span class="format-col">rechallenge</span>
+          <span class="format-col">alternative_cause</span>
+          <span class="format-col">narrative</span>
+          <span class="format-col">reporter</span>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--w-stone-gray);">
+          <span style="color:var(--w-terracotta);font-weight:500;">*</span> Required columns &nbsp;·&nbsp; dechallenge values: <code style="font-family:var(--font-mono)">positive / negative / unknown</code>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label" for="region">Country / Region <span class="required">*</span></label>
-        <select class="form-select" id="region" onchange="updateCompleteness()">
-          <option value="">Select country</option>
-          <option value="SA" selected>Saudi Arabia</option>
-          <option value="AE">United Arab Emirates</option>
-          <option value="KW">Kuwait</option>
-          <option value="BH">Bahrain</option>
-          <option value="QA">Qatar</option>
-          <option value="OM">Oman</option>
-          <option value="OTHER">Other</option>
-        </select>
+      <!-- UPLOAD ACTIONS -->
+      <div class="upload-actions">
+        <div class="upload-note">Cases will be previewed before being sent to the queue</div>
+        <button class="btn-upload" id="upload-btn" onclick="uploadFile()" disabled>
+          📊 Upload & Assess
+        </button>
       </div>
 
-      <div class="divider"></div>
-      <div class="panel-section-title">Reporter information</div>
+      <!-- STATUS -->
+      <div class="upload-status" id="upload-status"></div>
+    </div>
 
-      <div class="form-group">
-        <label class="form-label" for="reporter">Reporter type <span class="required">*</span></label>
-        <select class="form-select" id="reporter" onchange="updateCompleteness()">
-          <option value="">Select type</option>
-          <option value="physician">Physician</option>
-          <option value="pharmacist">Pharmacist</option>
-          <option value="nurse">Nurse</option>
-          <option value="patient">Patient / Consumer</option>
-          <option value="other">Other healthcare professional</option>
-        </select>
+    <!-- PREVIEW TABLE -->
+    <div class="preview-wrap" id="preview-wrap">
+      <div class="preview-header">
+        <div class="preview-title">Assessment Preview</div>
+        <div class="preview-count" id="preview-count">0 cases</div>
       </div>
-
-      <div class="form-group">
-        <label class="form-label" for="report-src">Report source</label>
-        <select class="form-select" id="report-src">
-          <option value="">Select source</option>
-          <option value="spontaneous">Spontaneous</option>
-          <option value="literature">Literature</option>
-          <option value="trial">Clinical trial</option>
-          <option value="registry">Registry</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="report-date">Report date <span class="required">*</span></label>
-        <input class="form-input" id="report-date" type="date" value="2024-04-15" onchange="updateCompleteness()" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="medical-history">Relevant medical history</label>
-        <textarea class="form-input form-textarea" id="medical-history" placeholder="e.g. Type 2 diabetes, hypertension, CKD stage 3..." rows="3"></textarea>
+      <div class="preview-table-wrap">
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Drug</th>
+              <th>Age / Sex</th>
+              <th>Time to onset</th>
+              <th>Dechallenge</th>
+              <th>WHO–UMC Category</th>
+              <th>Confidence</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="preview-body"></tbody>
+        </table>
       </div>
     </div>
 
-    <!-- ── CENTER PANEL — Drug & Event ── -->
-    <div class="panel panel-center">
-      <!-- REPORT UPLOAD -->
-      <div class="form-group" style="margin-bottom:var(--sp-24);">
-        <div class="panel-section-title" style="margin-bottom:var(--sp-12);">Upload report document</div>
-        <label class="form-label">Attach source document <span style="color:var(--w-stone-gray);font-weight:400;">(optional)</span></label>
-        <div class="upload-zone" id="upload-zone"
-          ondragover="event.preventDefault();this.classList.add('dragover')"
-          ondragleave="this.classList.remove('dragover')"
-          ondrop="handleFileDrop(event)">
-          <input type="file" id="report-file" accept=".pdf,.doc,.docx,.txt,.xml"
-            onchange="handleFileSelect(event)" />
-          <div class="upload-icon">📄</div>
-          <div class="upload-primary-text">Drop file here or click to browse</div>
-          <div class="upload-secondary-text">Supports PDF, DOCX, TXT, XML · Max 20 MB</div>
-        </div>
-        <div class="upload-file-info" id="upload-file-info">
-          <span>📎</span>
-          <span class="upload-file-name" id="upload-file-name">—</span>
-          <button class="upload-file-remove" onclick="removeUpload()" title="Remove file">✕</button>
-        </div>
+    <!-- CONFIRM ACTIONS -->
+    <div class="confirm-actions" id="confirm-actions">
+      <div class="confirm-note">
+        <strong id="confirm-count">0 cases</strong> assessed and ready to be added to the queue.
       </div>
-
-      <div class="divider"></div>
-      <div class="panel-section-title">Suspect drug information</div>
-
-      <div class="form-group" id="fg-drug">
-        <label class="form-label" for="drug-name">Suspect drug name <span class="required">*</span></label>
-        <input class="form-input" id="drug-name" type="text" placeholder="e.g. Metformin 500mg" value="Metformin 500mg" oninput="updateCompleteness()" />
-        <div class="form-error">Suspect drug name is required</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="drug-dose">Dose &amp; route</label>
-        <input class="form-input" id="drug-dose" type="text" placeholder="e.g. 500mg oral twice daily" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="drug-indication">Indication for use</label>
-        <input class="form-input" id="drug-indication" type="text" placeholder="e.g. Type 2 diabetes mellitus" value="Type 2 diabetes mellitus" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="drug-start">Drug start date</label>
-        <input class="form-input" id="drug-start" type="date" value="2024-04-10" />
-      </div>
-
-      <div class="divider"></div>
-      <div class="panel-section-title">Adverse event information</div>
-
-      <div class="form-group" id="fg-events">
-        <label class="form-label">MedDRA event terms <span class="required">*</span></label>
-        <div class="tag-input-wrap" id="tag-wrap" onclick="document.getElementById('tag-field').focus()">
-          <span class="meddra-tag">
-            Lactic acidosis
-            <span class="tag-remove" onclick="removeTag(this)">×</span>
-          </span>
-          <span class="meddra-tag">
-            Nausea
-            <span class="tag-remove" onclick="removeTag(this)">×</span>
-          </span>
-          <input
-            class="tag-input-field"
-            id="tag-field"
-            placeholder="Type MedDRA term + Enter"
-            onkeydown="handleTagInput(event)"
-          />
-        </div>
-        <div class="form-helper">Press Enter to add each MedDRA-coded term</div>
-      </div>
-
-      <div class="form-group" id="fg-onset">
-        <label class="form-label" for="time-onset">Time to onset <span class="required">*</span></label>
-        <input class="form-input" id="time-onset" type="text" placeholder="e.g. 3 days, 2 weeks" value="3 days" oninput="updateCompleteness()" />
-        <div class="form-helper">Time from drug start to adverse event onset</div>
-        <div class="form-error">Time to onset is required</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="event-date">Event onset date</label>
-        <input class="form-input" id="event-date" type="date" value="2024-04-13" />
-      </div>
-
-      <div class="divider"></div>
-      <div class="panel-section-title">Dechallenge &amp; rechallenge</div>
-
-      <div class="form-group">
-        <label class="form-label">Dechallenge result <span class="required">*</span></label>
-        <div class="toggle-group">
-          <button class="toggle-btn active-pos" onclick="selectToggle(this, 'dechallenge')">✓ Positive</button>
-          <button class="toggle-btn" onclick="selectToggle(this, 'dechallenge')">✗ Negative</button>
-          <button class="toggle-btn" onclick="selectToggle(this, 'dechallenge')">— Unknown</button>
-          <button class="toggle-btn" onclick="selectToggle(this, 'dechallenge')">N/A</button>
-        </div>
-        <div class="form-helper">Did symptoms improve after drug withdrawal?</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Rechallenge result</label>
-        <div class="toggle-group">
-          <button class="toggle-btn" onclick="selectToggle(this, 'rechallenge')">✓ Positive</button>
-          <button class="toggle-btn" onclick="selectToggle(this, 'rechallenge')">✗ Negative</button>
-          <button class="toggle-btn active-unk" onclick="selectToggle(this, 'rechallenge')">— Unknown</button>
-          <button class="toggle-btn" onclick="selectToggle(this, 'rechallenge')">Not done</button>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="panel-section-title">Concomitant drugs</div>
-
-      <div class="form-group">
-        <label class="form-label">Concomitant medications</label>
-        <div class="tag-input-wrap" id="drug-wrap" onclick="document.getElementById('drug-field').focus()">
-          <span class="drug-tag">Lisinopril 10mg</span>
-          <span class="drug-tag">Atorvastatin 20mg</span>
-          <input
-            class="tag-input-field"
-            id="drug-field"
-            placeholder="Type drug name + Enter"
-            onkeydown="handleDrugInput(event)"
-            style="color:var(--w-near-black);"
-          />
-        </div>
-        <div class="form-helper">Include dose and route where known</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Alternative cause</label>
-        <input class="form-input" type="text" placeholder="e.g. Renal impairment (eGFR 42), pre-existing condition..." value="Renal impairment (eGFR 42)" />
-        <div class="form-helper">Any other explanation for the adverse event?</div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="panel-section-title">Clinical outcome</div>
-
-      <div class="form-group">
-        <div class="outcome-grid" id="outcome-grid">
-          <div class="outcome-opt selected" onclick="selectOutcome(this)">Recovered</div>
-          <div class="outcome-opt" onclick="selectOutcome(this)">Recovering</div>
-          <div class="outcome-opt" onclick="selectOutcome(this)">Not recovered</div>
-          <div class="outcome-opt" onclick="selectOutcome(this)">Recovered with sequelae</div>
-          <div class="outcome-opt" onclick="selectOutcome(this)">Fatal</div>
-          <div class="outcome-opt" onclick="selectOutcome(this)">Unknown</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── RIGHT PANEL — Narrative + Completeness ── -->
-    <div class="panel panel-right">
-
-      <!-- Completeness checker -->
-      <div class="completeness-card">
-        <div class="completeness-title">
-          Case completeness
-          <span class="completeness-pct" id="comp-pct">78%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="comp-bar" style="width:78%"></div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon ok">✓</div>
-          <div class="check-text ok">Patient demographics</div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon ok">✓</div>
-          <div class="check-text ok">Suspect drug identified</div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon ok">✓</div>
-          <div class="check-text ok">MedDRA event terms added</div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon ok">✓</div>
-          <div class="check-text ok">Time to onset specified</div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon ok">✓</div>
-          <div class="check-text ok">Dechallenge status set</div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon warn">!</div>
-          <div class="check-text warn">Case narrative — recommended</div>
-        </div>
-        <div class="check-item">
-          <div class="check-icon err">✗</div>
-          <div class="check-text err">Reporter information incomplete</div>
-        </div>
-      </div>
-
-      <!-- E2B Standards -->
-      <div class="standards-card">
-        <div class="panel-section-title" style="margin-bottom:var(--sp-12)">E2B(R3) compliance</div>
-        <div class="standards-row">
-          <span class="standards-key">Format</span>
-          <span class="standards-badge badge-ok">ICH E2B(R3)</span>
-        </div>
-        <div class="standards-row">
-          <span class="standards-key">MedDRA version</span>
-          <span class="standards-val">27.0</span>
-        </div>
-        <div class="standards-row">
-          <span class="standards-key">WHO Drug Dict.</span>
-          <span class="standards-val">March 2025</span>
-        </div>
-        <div class="standards-row">
-          <span class="standards-key">Mandatory fields</span>
-          <span class="standards-badge badge-ok">6/7 filled</span>
-        </div>
-        <div class="standards-row">
-          <span class="standards-key">Duplicate check</span>
-          <span class="standards-badge badge-ok">No match</span>
-        </div>
-        <div class="standards-row">
-          <span class="standards-key">Seriousness</span>
-          <span class="standards-badge badge-warn">Not set</span>
-        </div>
-      </div>
-
-      <!-- Case narrative -->
-      <div class="panel-section-title">Case narrative</div>
-
-      <div class="alert-missing" id="narrative-alert">
-        <strong>Narrative recommended</strong>
-        A case narrative improves NLP accuracy. The AI model will still run without it, but confidence scores may be lower.
-      </div>
-
-      <div class="form-group narrative-wrap">
-        <textarea
-          class="form-input form-textarea"
-          id="narrative"
-          placeholder="Describe the case in clinical terms — patient background, drug exposure, adverse event onset, clinical management, and outcome..."
-          rows="8"
-          oninput="updateNarrativeCount()"
-          style="min-height:160px;"
-        >54-year-old female with Type 2 diabetes prescribed Metformin 500mg. Presented with nausea and elevated lactate 3 days post-initiation. Drug withdrawn; symptoms resolved within 48 hours. Renal function borderline (eGFR 42).</textarea>
-        <div class="narrative-count" id="narrative-count">187 chars</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="seriousness">Seriousness criteria</label>
-        <select class="form-select" id="seriousness">
-          <option value="">Select criteria</option>
-          <option value="death">Death</option>
-          <option value="life-threatening">Life-threatening</option>
-          <option value="hospitalization">Hospitalization</option>
-          <option value="disability">Disability / Incapacity</option>
-          <option value="congenital">Congenital anomaly</option>
-          <option value="medically-significant">Medically significant</option>
-          <option value="non-serious">Non-serious</option>
-        </select>
-      </div>
-
-    </div>
-  </div><!-- /main -->
-
-  <!-- ACTION BAR -->
-  <div class="action-bar">
-    <div class="action-left">
-      <button class="btn-ghost" onclick="clearForm()">Clear form</button>
-      <div class="action-note">Auto-saved · Last save: 02:24 AM</div>
-    </div>
-    <div class="action-right">
-      <button class="btn-secondary" onclick="saveDraft()">Save draft</button>
-      <button class="btn-primary" id="run-btn" onclick="runAssessment()">
-        Run AI assessment →
+      <button class="btn-confirm" onclick="confirmAndGoToDashboard()">
+        Send to Queue → Dashboard
       </button>
     </div>
-  </div>
+
+  </div><!-- /main -->
 
   <!-- FOOTER -->
   <div class="page-footer">
@@ -1078,155 +495,129 @@
   </div>
 
   <script>
+    let assessedCases = [];
 
-    // ── File upload ──
-    function handleFileSelect(e) {
+    function handleSelect(e) {
       const file = e.target.files[0];
-      if (file) showUploadedFile(file);
+      if (file) showFile(file);
     }
-    function handleFileDrop(e) {
+
+    function handleDrop(e) {
       e.preventDefault();
-      document.getElementById('upload-zone').classList.remove('dragover');
+      document.getElementById('drop-zone').classList.remove('dragover');
       const file = e.dataTransfer.files[0];
-      if (file) showUploadedFile(file);
+      if (file) showFile(file);
     }
-    function showUploadedFile(file) {
+
+    function showFile(file) {
       const sizeMB = (file.size / 1048576).toFixed(1);
-      document.getElementById('upload-file-name').textContent = file.name + '  (' + sizeMB + ' MB)';
-      document.getElementById('upload-file-info').classList.add('visible');
-    }
-    function removeUpload() {
-      document.getElementById('report-file').value = '';
-      document.getElementById('upload-file-name').textContent = '—';
-      document.getElementById('upload-file-info').classList.remove('visible');
+      document.getElementById('file-name').textContent = file.name + '  (' + sizeMB + ' MB)';
+      document.getElementById('file-info').classList.add('visible');
+      document.getElementById('upload-btn').disabled = false;
     }
 
-    // ── Tag input — MedDRA terms ──
-    function handleTagInput(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const val = e.target.value.trim();
-        if (!val) return;
-        const tag = document.createElement('span');
-        tag.className = 'meddra-tag';
-        tag.innerHTML = `${val} <span class="tag-remove" onclick="removeTag(this)">×</span>`;
-        document.getElementById('tag-wrap').insertBefore(tag, e.target);
-        e.target.value = '';
-        updateCompleteness();
+    function removeFile() {
+      document.getElementById('excel-file').value = '';
+      document.getElementById('file-name').textContent = '—';
+      document.getElementById('file-info').classList.remove('visible');
+      document.getElementById('upload-btn').disabled = true;
+      document.getElementById('upload-status').className = 'upload-status';
+      document.getElementById('preview-wrap').classList.remove('visible');
+      document.getElementById('confirm-actions').classList.remove('visible');
+      assessedCases = [];
+    }
+
+    async function uploadFile() {
+      const fileInput = document.getElementById('excel-file');
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const btn = document.getElementById('upload-btn');
+      btn.disabled = true;
+      btn.textContent = 'Assessing...';
+
+      const status = document.getElementById('upload-status');
+      status.className = 'upload-status loading';
+      status.innerHTML = '<div class="spinner"></div> Assessing cases — please wait...';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          assessedCases = result.cases;
+          showPreview(result.cases);
+          status.className = 'upload-status success';
+          status.innerHTML = '✓ ' + result.cases_processed + ' cases assessed successfully. Review below then send to queue.';
+          btn.textContent = '✓ Done';
+        } else {
+          status.className = 'upload-status error';
+          status.innerHTML = '✗ Upload failed: ' + result.message;
+          btn.disabled = false;
+          btn.textContent = '📊 Upload & Assess';
+        }
+      } catch (err) {
+        status.className = 'upload-status error';
+        status.innerHTML = '✗ Something went wrong. Make sure the server is running.';
+        btn.disabled = false;
+        btn.textContent = '📊 Upload & Assess';
       }
     }
-    function removeTag(el) {
-      el.parentElement.remove();
-      updateCompleteness();
+
+    function getCatClass(category) {
+      if (category.includes('Certain'))     return 'certain';
+      if (category.includes('Probable'))    return 'probable';
+      if (category.includes('Possible'))    return 'possible';
+      if (category.includes('Unlikely'))    return 'unlikely';
+      if (category.includes('Conditional')) return 'cond';
+      return 'unassess';
     }
 
-    // ── Tag input — Concomitant drugs ──
-    function handleDrugInput(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const val = e.target.value.trim();
-        if (!val) return;
-        const tag = document.createElement('span');
-        tag.className = 'drug-tag';
-        tag.textContent = val;
-        document.getElementById('drug-wrap').insertBefore(tag, e.target);
-        e.target.value = '';
-      }
-    }
+    function showPreview(cases) {
+      const tbody = document.getElementById('preview-body');
+      tbody.innerHTML = '';
 
-    // ── Toggle buttons (dechallenge/rechallenge) ──
-    function selectToggle(btn, group) {
-      const siblings = btn.parentElement.querySelectorAll('.toggle-btn');
-      siblings.forEach(b => {
-        b.classList.remove('active-pos','active-neg','active-unk');
+      cases.forEach((c, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="font-family:var(--font-mono);font-size:11px;color:var(--w-stone-gray)">${i + 1}</td>
+          <td style="font-weight:500">${c.drug || '—'}</td>
+          <td>${c.age || '—'} · ${c.sex || '—'}</td>
+          <td>${c.time_onset || '—'}</td>
+          <td>${c.dechallenge || '—'}</td>
+          <td><span class="cat-pill cat-${getCatClass(c.category)}">${c.category}</span></td>
+          <td>
+            <div class="conf-wrap">
+              <div class="conf-bar-bg">
+                <div class="conf-bar-fill" style="width:${c.confidence}%"></div>
+              </div>
+              <div class="conf-val">${c.confidence}%</div>
+            </div>
+          </td>
+          <td style="font-family:var(--font-mono);font-size:12px">${c.score}</td>
+        `;
+        tbody.appendChild(row);
       });
-      const text = btn.textContent.trim();
-      if (text.startsWith('✓'))      btn.classList.add('active-pos');
-      else if (text.startsWith('✗')) btn.classList.add('active-neg');
-      else if (text.startsWith('—')) btn.classList.add('active-unk');
-      else                           btn.classList.add('active-unk');
+
+      document.getElementById('preview-count').textContent = cases.length + ' cases';
+      document.getElementById('preview-wrap').classList.add('visible');
+
+      document.getElementById('confirm-count').textContent = cases.length + ' cases';
+      document.getElementById('confirm-actions').classList.add('visible');
+
+      // Scroll to preview
+      document.getElementById('preview-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // ── Outcome selection ──
-    function selectOutcome(el) {
-      document.querySelectorAll('.outcome-opt').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
+    function confirmAndGoToDashboard() {
+      window.location.href = '/screens/03-dashboard.html';
     }
-
-    // ── Completeness checker ──
-    function updateCompleteness() {
-      const age      = document.getElementById('age').value.trim();
-      const sex      = document.getElementById('sex').value;
-      const region   = document.getElementById('region').value;
-      const reporter = document.getElementById('reporter').value;
-      const drug     = document.getElementById('drug-name').value.trim();
-      const onset    = document.getElementById('time-onset').value.trim();
-      const date     = document.getElementById('report-date').value;
-
-      const fields   = [age, sex, region, reporter, drug, onset, date];
-      const filled   = fields.filter(f => f !== '').length;
-      const pct      = Math.round((filled / fields.length) * 100);
-
-      document.getElementById('comp-pct').textContent = pct + '%';
-      document.getElementById('comp-bar').style.width  = pct + '%';
-    }
-
-    // ── Narrative character count ──
-    function updateNarrativeCount() {
-      const len = document.getElementById('narrative').value.length;
-      document.getElementById('narrative-count').textContent = len + ' chars';
-      if (len > 0) {
-        document.getElementById('narrative-alert').classList.remove('visible');
-      } else {
-        document.getElementById('narrative-alert').classList.add('visible');
-      }
-    }
-
-    // ── Save draft ──
-    function saveDraft() {
-      const btn = event.target;
-      btn.textContent = 'Saved ✓';
-      btn.style.borderBottomColor = 'var(--c-green-50)';
-      setTimeout(() => {
-        btn.textContent = 'Save draft';
-        btn.style.borderBottomColor = '';
-      }, 2000);
-    }
-
-    // ── Clear form ──
-    function clearForm() {
-      if (confirm('Clear all form data? This cannot be undone.')) {
-        document.getElementById('age').value         = '';
-        document.getElementById('sex').value         = '';
-        document.getElementById('region').value      = '';
-        document.getElementById('reporter').value    = '';
-        document.getElementById('drug-name').value   = '';
-        document.getElementById('time-onset').value  = '';
-        document.getElementById('narrative').value   = '';
-        updateCompleteness();
-        updateNarrativeCount();
-      }
-    }
-
-    // ── Run AI Assessment ──
-    function runAssessment() {
-      const drug  = document.getElementById('drug-name').value.trim();
-      const onset = document.getElementById('time-onset').value.trim();
-      const age   = document.getElementById('age').value.trim();
-      if (!drug || !onset || !age) {
-        document.getElementById('narrative-alert').classList.add('visible');
-        document.getElementById('narrative-alert').querySelector('strong').textContent = 'Required fields missing';
-        document.getElementById('narrative-alert').querySelector('strong').nextSibling.textContent
-          = ' Please fill in patient age, suspect drug, and time to onset before running the AI assessment.';
-        document.getElementById('narrative-alert').style.display = 'block';
-        return;
-      }
-      window.location.href = '/screens/01-ai-result.html';
-    }
-
-    // Init
-    updateNarrativeCount();
-    updateCompleteness();
   </script>
 
 </body>

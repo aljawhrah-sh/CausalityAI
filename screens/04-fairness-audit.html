@@ -726,6 +726,95 @@
             Inherently ambiguous cases are harder to classify. Additional annotation guidelines recommended.
           </div>
         </div>
+        <!-- Outcome -->
+        <div class="fairness-card">
+          <div class="subsection-label">F1-score by clinical outcome</div>
+
+          <div class="f1-row">
+            <div class="f1-label">Recovered</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.83</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Recovering</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:94%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.78</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Not recovered</div>
+            <div class="f1-track">
+              <div class="f1-fill warn" style="width:85%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val warn">0.69</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Fatal</div>
+            <div class="f1-track">
+              <div class="f1-fill danger" style="width:75%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val danger">0.61</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Unknown</div>
+            <div class="f1-track">
+              <div class="f1-fill warn" style="width:78%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val warn">0.64</div>
+          </div>
+
+          <div class="alert-red">
+            <strong>Performance gap — Fatal outcome cases</strong>
+            F1 of 0.61 is below the 0.65 threshold. Fatal cases are often more complex with multiple confounders. Recommend additional expert annotation for this subgroup.
+          </div>
+        </div>
+
+        <!-- Seriousness -->
+        <div class="fairness-card">
+          <div class="subsection-label">F1-score by report seriousness</div>
+
+          <div class="f1-row">
+            <div class="f1-label">Serious</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:100%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.84</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Non-serious</div>
+            <div class="f1-track">
+              <div class="f1-fill good" style="width:92%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val good">0.76</div>
+          </div>
+          <div class="f1-row">
+            <div class="f1-label">Not set</div>
+            <div class="f1-track">
+              <div class="f1-fill danger" style="width:74%"></div>
+              <div class="f1-ref" style="left:100%"></div>
+            </div>
+            <div class="f1-val danger">0.59</div>
+          </div>
+
+          <div class="alert-red">
+            <strong>Performance gap — Seriousness not set</strong>
+            Cases missing seriousness classification score significantly lower. Assessors should be encouraged to always set seriousness criteria during intake.
+          </div>
+
+          <div class="alert-lime">
+            <strong>Note:</strong> Serious cases perform better because they typically contain more complete clinical information — more detailed narratives, clearer dechallenge data, and longer follow-up.
+          </div>
+        </div>
 
       </div><!-- /fairness-grid -->
     </div>
