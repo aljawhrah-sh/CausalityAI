@@ -34,6 +34,13 @@ def assess():
     region = data.get('region', '')
     reporter = data.get('reporter', '')
 
+    
+    #check if dechallenge has a real value 
+    #check if has_evidence is true
+    has_dechallenge = dechallenge in ('positive', 'negative')
+    has_rechallenge = rechallenge in ('positive', 'negative')
+    has_evidence = has_dechallenge or has_rechallenge or time_to_onset or narrative
+
     score = 0
     if dechallenge == 'positive':
         score += 3
@@ -47,7 +54,11 @@ def assess():
         score -= 1
     if narrative:
         score += 1
-    if score >= 6:
+
+    if not has_evidence:
+        category = 'Unassessable'
+        confidence = 20
+    elif score >= 6:
         category = 'Certain'
         confidence = 92
     elif score >= 4:
