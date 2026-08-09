@@ -21,6 +21,8 @@ def create_tables():
         region      TEXT,
         time_onset  TEXT,
         dechallenge TEXT,
+        rechallenge TEXT,
+        alternative TEXT,
         narrative   TEXT,
         category    TEXT,
         confidence  INTEGER,
@@ -43,16 +45,16 @@ def create_tables():
     conn.close()
 
 
-def save_case(drug, age, sex, region, time_onset, dechallenge, narrative, category, confidence, score):
+def save_case(drug, age, sex, region, time_onset, dechallenge,rechallenge, alternative, narrative, category, confidence, score):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     #insert data into the tables
     cursor.execute('''
         INSERT INTO cases
-        (drug, age, sex, region, time_onset, dechallenge, narrative, category, confidence, score)
-        VALUES(?,?,?,?,?,?,?,?,?,?)
-    ''',(drug, age, sex, region, time_onset, dechallenge, narrative, category, confidence, score))
+        (drug, age, sex, region, time_onset, dechallenge,rechallenge, alternative, narrative, category, confidence, score)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+    ''',(drug, age, sex, region, time_onset, dechallenge,rechallenge, alternative, narrative, category, confidence, score))
     
     case_id = cursor.lastrowid
     conn.commit()
