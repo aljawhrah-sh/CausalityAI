@@ -113,6 +113,133 @@ def get_cases():
     cases = database.get_cases()
     return jsonify(cases)
 
+@app.route('/api/upload', methods=['POST'])
+def upload_excel():
+    #two ifs checking if the file was sent before trying to read it  
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'message':'No file uploaded'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'success': False, 'message': 'No files selected'}), 400
+    
+    try:
+        import openpyxl
+        #wb = woekbook which is the whole excel file
+        wb = openpyxl.load_workbook(file)
+        #ws = worksheet which is the first sheet in the workbook
+        ws = wb.active
+
+        headers = []
+        #ws[1] is the header that's why we skipped the first row the the secnd will be the data and so on
+        for cell in ws[1]:
+            if cell.value:
+                headers.append(str(cell.value).strip().lower())
+            else:
+                headers.append('')
+        #counter
+        cases_processed = 0
+        all_cases = []
+
+        for row in ws.iter_rows(min_row= 2, values_only= True):
+            #if the entire row is empty jump to the next one 
+            if not any(row):
+                continue
+            #ex: {'drug_name': 'Warfarin 5mg', 'age': 45, 'sex': 'F'}
+            data = dict(zip(headers, row))
+
+            drug = str(data.get('drug_name', '') or '').strip()
+            age = str(data.get('age', '') or '').strip()
+            sex = str(data.get('sex', '')or '').strip()
+            region = str(data.get('region', '')or '').strip()
+            time_onset = str(data.get('time_to_onset', '') or '').strip()
+            dechallenge = str(data.get('dechallenge', 'unknown') or 'unknown').strip().lower()
+            rechallenge = str(data.get('rechallenge', 'unknown') or 'unknown').strip().lower()
+            alternative = str(data.get('alternalive_cause', '') or '').strip()
+            narrative = str(data.get('narrative', '') or '').strip()
+
+
+            #check if dechallenge has a real value 
+            #check if has_evidence is true
+            has_dechallenge = dechallenge in ('positive', 'negative')
+            has_rechallenge = rechallenge in ('positive', 'negative')
+            has_evidence = has_dechallenge or has_rechallenge or time_onset or narrative
+
+            #scoring logic same as assess() applied to each row
+            score = 0
+            if dechallenge == 'positive':
+                score += 3
+            if dechallenge == 'negative':
+                score -= 1
+            if rechallenge == 'positive':
+                score += 3
+            if time_onset:
+                score += 1
+            if alternative:
+                score -= 1
+            if narrative:
+                score += 1
+
+
+            # mapping by converting numeric score into one of our six WHO-WMC categories with its percentage
+            if not has_evidence:
+                category = 'Unassessable'
+                confidence = 20
+            elif score >= 6:
+                category = 'Certain'
+                confidence = 92
+            elif score >= 4:
+                category = 'Probable / Likely'
+                confidence = 78
+            elif score >= 2:
+                category = 'Possible'
+                confidence = 61
+            elif score >= 0:
+                category = 'Unlikely'
+                confidence = 45
+            else:
+                category = 'Enassessable'
+                confidence = 20
+
+            #save to database
+            case_id = database.save_case(
+                drug = drug,
+                age = age,
+                sex = sex,
+                region = region,
+                time_onset= time_onset,
+                dechallenge= dechallenge,
+                narrative= narrative,
+                category= category,
+                confidence= confidence,
+                score= score
+            )
+
+            #sending the case back to frontend for the preview
+            all_cases.append({
+                'id': case_id,
+                'drug': drug,
+                'age': age,
+                'sex': sex,
+                'region': region,
+                'time_onset': time_onset,
+                'dechallenge': dechallenge,
+                'category': category,
+                'confidence': confidence,
+                'score': score
+            })
+
+            cases_processed += 1
+        return jsonify({
+            'success': True,
+            'cases_processed': cases_processed,
+            'cases': all_cases,
+            'message': f'{cases_processed} cases assessed and saved successfully'
+        })    
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+    
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
     import sqlite3
