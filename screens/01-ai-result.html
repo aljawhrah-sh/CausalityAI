@@ -1010,17 +1010,103 @@
   </div>
 
   <script>
+    function getCaseIdFromUrl(){
+      const params = new URLSearchParams(window.location.search);
+      return params.get('case_id');
+    }
+
+    async function loadCase() {
+      const caseId = getCaseIdFromUrl();
+
+      if(caseId){
+        const response = await fetch('/api/case/' + caseId);
+        if(!response.ok) return;
+        const result = await response.json();
+        displayCase(result);
+        return;
+      }
+
+      const stored = sessionStorage.getItem('assessment');
+      if (stored){
+        displayCase(JSON.parse(stored));
+      }
+    }
+
+function displayCase(c) {
+      // ── Verdict card ──
+      const vc = document.querySelector('.verdict-category');
+      if (vc) vc.textContent = c.category;
+
+      const cn = document.querySelector('.conf-num');
+      if (cn) cn.textContent = c.confidence + '%';
+
+      const vs = document.querySelector('.verdict-sub');
+      if (vs) vs.textContent = 'Score: ' + c.score + ' · Rule-based WHO–UMC engine';
+
+      // ── Header chips ──
+      const chips = document.querySelectorAll('.case-chip');
+      if (chips[0]) chips[0].textContent = c.drug || '—';
+      if (chips[1]) chips[1].textContent = '—';                                    // adverse event — not stored
+      if (chips[2]) chips[2].textContent = (c.sex || '—') + ', ' + (c.age || '—') + ' y';
+      if (chips[3]) chips[3].textContent = c.region || '—';
+
+      // ── Case summary panel ──
+      const rows = document.querySelectorAll('.summary-val');
+      if (rows[0]) rows[0].textContent = 'ICSR-' + String(c.id).padStart(4, '0');  // case ID
+      if (rows[1]) rows[1].textContent = c.drug || '—';                            // suspect drug
+      if (rows[2]) rows[2].textContent = '—';                                      // adverse event — not stored
+      if (rows[3]) rows[3].textContent = (c.sex || '—') + ', ' + (c.age || '—') + ' · ' + (c.region || '—');
+      if (rows[4]) rows[4].textContent = c.time_onset  || '—';                     // time to onset
+      if (rows[5]) rows[5].textContent = c.dechallenge || '—';
+      if (rows[6]) rows[6].textContent = c.rechallenge || '—';
+      if (rows[7]) rows[7].textContent = '—';                                      // outcome — not stored
+      if (rows[8]) rows[8].textContent = '—';                                      // reporter — not stored
+      if (rows[9]) rows[9].textContent = c.category;                               // AI prediction
+    }
+
     function selectOpt(el) {
       document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
       const reasoning = document.getElementById('reasoning').value.trim();
-      const selected  = document.querySelector('.opt.selected .opt-label').textContent;
-      
-      alert(`Decision logged.\n\n${selected}\n\nCase ICSR-2024-08841 submitted to audit trail.`); setTimeout(() => { window.location.href = '03-dashboard.html'; }, 500);
+      const selectedEl = document.querySelector('.opt.selected .opt-label');
+
+      if (!selectedEl) {
+        alert('Please select a decision first.');
+        return;
+      }
+
+      const selected = selectedEl.textContent;
+      const caseId = getCaseIdFromUrl();
+
+      if (!caseId) {
+        alert('No case is loaded — decision cannot be logged.');
+        return;
+      }
+
+      const response = await fetch('/api/decision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id:   parseInt(caseId),
+          assessor:  'N A',
+          action:    selected.includes('Confirm') ? 'confirmed' : 'overridden',
+          final_cat: selected,
+          reasoning: reasoning
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        window.location.href = '/screens/03-dashboard.html';
+      } else {
+        alert('Could not save decision: ' + result.message);
+      }
     }
+    loadCase();
   </script>
 
 </body>
