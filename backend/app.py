@@ -240,6 +240,8 @@ def upload_excel():
                 'region': region,
                 'time_onset': time_onset,
                 'dechallenge': dechallenge,
+                'rechallenge': rechallenge,
+                'alternative': alternative,
                 'category': category,
                 'confidence': confidence,
                 'score': score

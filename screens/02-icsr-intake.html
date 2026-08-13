@@ -466,6 +466,7 @@
               <th>Age / Sex</th>
               <th>Time to onset</th>
               <th>Dechallenge</th>
+              <th>Rechallenge</th>
               <th>WHO–UMC Category</th>
               <th>Confidence</th>
               <th>Score</th>
@@ -591,6 +592,7 @@
           <td>${c.age || '—'} · ${c.sex || '—'}</td>
           <td>${c.time_onset || '—'}</td>
           <td>${c.dechallenge || '—'}</td>
+          <td>${c.rechallenge || '—'}</td>
           <td><span class="cat-pill cat-${getCatClass(c.category)}">${c.category}</span></td>
           <td>
             <div class="conf-wrap">
