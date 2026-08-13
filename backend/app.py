@@ -126,6 +126,15 @@ def get_cases():
     cases = database.get_cases()
     return jsonify(cases)
 
+@app.route('/api/case/<int:case_id>', methods=['GET'])
+def get_case(case_id):
+    case = database.get_case_by_id(case_id)
+
+    if case is None:
+        return jsonify({'success': False, 'message':'Case not found'}), 404
+
+    return jsonify(case)
+
 @app.route('/api/upload', methods=['POST'])
 def upload_excel():
     #two ifs checking if the file was sent before trying to read it  
@@ -294,6 +303,7 @@ def get_stats():
         'total_cases': total_cases,
         'completed_today': completed_today,
         'agreement_rate': agreement,
+        'total_decisions':total_decisions,
         'categories': categories
     })
 

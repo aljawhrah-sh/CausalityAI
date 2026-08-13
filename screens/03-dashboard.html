@@ -100,6 +100,10 @@
     .cat-unassess{background:rgba(218,30,40,0.10);color:var(--c-red-60);}
     .open-btn{background:transparent;border:1px solid var(--w-border-warm);color:var(--w-olive-gray);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;transition:all 0.15s;white-space:nowrap;text-decoration:none;display:inline-block;}
     .open-btn:hover{background:var(--w-terracotta);color:#fff;border-color:var(--w-terracotta);}
+    .conf-wrap{display:flex;align-items:center;gap:6px;}
+    .conf-bar-bg{flex:1;height:4px;background:var(--w-border-cream);min-width:40px;}
+    .conf-bar-fill{height:100%;}
+    .conf-val{font-family:var(--font-mono);font-size:11px;color:var(--w-stone-gray);width:32px;}
     .overdue-flag{font-size:9px;font-weight:600;background:var(--s-lime);color:#2a4000;padding:1px 5px;border-radius:2px;letter-spacing:0.16px;margin-left:4px;}
 
     .sidebar{display:flex;flex-direction:column;gap:var(--sp-12);}
@@ -171,8 +175,8 @@
         <option value="probable">Probable / Likely</option>
         <option value="possible">Possible</option>
         <option value="unlikely">Unlikely</option>
-        <option value="conditional">Conditional</option>
-        <option value="unassessable">Unassessable</option>
+        <option value="cond">Conditional</option>
+        <option value="unassess">Unassessable</option>
       </select>
       <select class="filter-select">
         <option>All reporters</option>
@@ -187,19 +191,24 @@
   <div class="kpi-band">
     <div class="kpi-card">
       <div class="kpi-label">Cases in queue</div>
-      <div class="kpi-value warn">47</div>
+      <div class="kpi-value warn" id="kpi-queue">47</div>
       <div class="kpi-delta down">↑ 12 from yesterday</div>
-      <div class="kpi-target">Daily target: &lt; 35</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Completed today</div>
-      <div class="kpi-value good">23</div>
+      <div class="kpi-value good" id="kpi-completed">23</div>
       <div class="kpi-delta up">↑ 8 above average</div>
       <div class="kpi-target">Team average: 15/day</div>
     </div>
     <div class="kpi-card">
+      <div class="kpi-label">AI agreement rate</div>
+      <div class="kpi-value" id="kpi-agreement">—</div>
+      <div class="kpi-delta up">Confirmed vs overridden</div>
+      <div class="kpi-target" id="kpi-agreement-note">Based on logged decisions</div>
+    </div>
+    <div class="kpi-card">
       <div class="kpi-label">Cohen's Kappa</div>
-      <div class="kpi-value good">0.71</div>
+      <div class="kpi-value good" id="kpi-kappa">0.71</div>
       <div class="kpi-delta up">↑ Target ≥ 0.60 ✓</div>
       <div class="kpi-target">Model v1.4.2 · Q1 2025</div>
     </div>
@@ -220,6 +229,7 @@
             <th onclick="sortTable(0)">Case ID <span class="sort-icon">↕</span></th>
             <th onclick="sortTable(1)">Drug / Adverse event <span class="sort-icon">↕</span></th>
             <th onclick="sortTable(2)">AI category <span class="sort-icon sorted">↓</span></th>
+            <th onclick="sortTable(3)">Confidence <span class="sort-icon">↕</span></th>
             <th onclick="sortTable(3)">Patient <span class="sort-icon">↕</span></th>
             <th onclick="sortTable(4)">Reporter <span class="sort-icon">↕</span></th>
             <th onclick="sortTable(5)">Received <span class="sort-icon">↕</span></th>
@@ -344,9 +354,61 @@
   <script>
     function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
     function signOut(){window.location.href="/screens/00-login.html";}
+    async function loadStats() {
+      const response = await fetch('/api/stats');
+      const stats = await response.json();
+
+      document.getElementById('kpi-queue').textContent = stats.total_cases;
+      document.getElementById('kpi-completed').textContent = stats.completed_today;
+      document.getElementById('kpi-agreement').textContent = stats.agreement_rate + '%';  
+      document.getElementById('kpi-agreement-note').textContent =
+        'Based on ' + stats.total_decisions + ' decisions';    
+    }
+    async function loadCasesFromDatabase() {
+      const response = await fetch('/api/cases');
+      const cases = await response.json();
+
+      const tbody = document.getElementById('queue-body');
+      tbody.innerHTML = '';
+
+      cases.forEach(c => {
+        const row = `
+        <tr data-cat="${getCatClass(c.category)}">
+          <td><div class="case-id-cell">ICSR-${String(c.id).padStart(4, '0')}</div></td>
+          <td><div class="drug-cell">${c.drug || '—'}</div></td>
+          <td><span class="cat-pill cat-${getCatClass(c.category)}">${c.category}</span></td>
+          <td>
+            <div class="conf-wrap">
+              <div class="conf-bar-bg">
+                <div class="conf-bar-fill" style="width:${c.confidence}%;background:var(--w-terracotta)"></div>
+              </div>
+              <div class="conf-val">${c.confidence}%</div>
+            </div>
+          </td>
+          <td>${c.sex || '—'} · ${c.age || '—'}y</td>
+          <td>—</td>
+          <td>${c.created_at ? c.created_at.split(' ')[0] : '—'}</td>
+          <td><a class="open-btn" href="/screens/01-ai-result.html?case_id=${c.id}">Open →</a></td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+      
+      document.getElementById('queue-count').textContent = cases.length + ' cases';
+    }
+    function getCatClass(category){
+      if(!category) return 'unassess';
+      if(category.includes('Certain')) return 'certain';
+      if(category.includes('Probable')) return 'probable';
+      if(category.includes('Possible')) return'possible';
+      if(category.includes('Unlikely')) return 'unlikely';
+      if (category.includes('Conditional')) return 'cond';
+      return 'unassess';
+    }
     function filterTable(cat){const rows=document.querySelectorAll('#queue-body tr');let count=0;rows.forEach(row=>{const rc=row.getAttribute('data-cat');if(cat==='all'||rc===cat){row.style.display='';count++;}else{row.style.display='none';}});document.getElementById('queue-count').textContent=count+' cases';}
     function searchTable(val){const rows=document.querySelectorAll('#queue-body tr');let count=0;const q=val.toLowerCase();rows.forEach(row=>{const text=row.textContent.toLowerCase();if(text.includes(q)){row.style.display='';count++;}else{row.style.display='none';}});document.getElementById('queue-count').textContent=count+' cases';}
     function sortTable(col){const tbody=document.getElementById('queue-body');const rows=Array.from(tbody.querySelectorAll('tr'));const ths=document.querySelectorAll('.data-table th');ths.forEach((th,i)=>{th.classList.remove('sorted');th.querySelector('.sort-icon').textContent='↕';});ths[col].classList.add('sorted');ths[col].querySelector('.sort-icon').textContent='↓';rows.sort((a,b)=>{const aT=a.cells[col]?a.cells[col].textContent.trim():'';const bT=b.cells[col]?b.cells[col].textContent.trim():'';return aT.localeCompare(bT);});rows.forEach(r=>tbody.appendChild(r));}
-  </script>
+    loadStats();
+    loadCasesFromDatabase();
+</script>
 </body>
 </html>

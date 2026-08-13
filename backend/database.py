@@ -104,3 +104,38 @@ def get_cases():
         })
 
     return cases
+
+#fetches the case regardless of how wit entered the system 
+def get_case_by_id(case_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT id, drug, age, sex, region, time_onset, dechallenge, rechallenge, alternative, narrative,
+        category, confidence, score, created_at
+        FROM cases WHERE id = ?
+    ''', (case_id,))
+
+    #fetchone() gets one row from the query result
+    row = cursor.fetchone()
+    conn.close()
+
+    if row is None:
+        return None
+
+    return {
+        'id': row[0],
+        'drug': row[1],
+        'age': row[2],
+        'sex': row[3],
+        'region': row[4],
+        'time_onset': row[5],
+        'dechallenge': row[6],
+        'rechallenge':row[7],
+        'alternative': row[8],
+        'narrative': row[9],
+        'category': row[10],
+        'confidence': row[11],
+        'score': row[12],
+        'created_at': row[13]
+    }
