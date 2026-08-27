@@ -11,11 +11,21 @@ def build_breakdown(case):
     rechallenge = (case.get('rechallenge') or '').lower()
     criteria = []
 
-    if dechallenge == 'positive':
-        criteria.append({'label': 'Positive dechallenge', 'detail': 'Symptoms resolved after withdrawal', 'weight': 3})
-    elif dechallenge == 'negative':
-        criteria.append({'label': 'Negative dechallenge', 'detail': 'Symptoms persisted after withdrawal', 'weight': -1})
+    resolved = (case.get('dechallenge_resolved') or '').lower()
+    d_weight = score_dechallenge(dechallenge, resolved)
 
+    if d_weight == 3:
+        criteria.append({'label': 'Dechallenge performed, reaction resolved',
+                         'detail': 'Drug withdrawn and symptoms resolved', 'weight': 3})
+    elif d_weight == 1:
+        criteria.append({'label': 'Dechallenge performed, outcome unknown',
+                         'detail': 'Drug withdrawn but resolution not recorded', 'weight': 1})
+    elif d_weight == -1 and dechallenge == 'yes':
+        criteria.append({'label': 'Dechallenge performed, reaction persisted',
+                         'detail': 'Drug withdrawn but symptoms continued', 'weight': -1})
+    elif d_weight == -1:
+        criteria.append({'label': 'Reaction resolved without withdrawal',
+                         'detail': 'Drug not withdrawn yet symptoms resolved', 'weight': -1})
     if rechallenge == 'positive':
         criteria.append({'label': 'Positive rechallenge', 'detail': 'Reaction recurred on re-exposure', 'weight': 3})
 
