@@ -21,6 +21,7 @@ def create_tables():
         region      TEXT,
         time_onset  TEXT,
         dechallenge TEXT,
+        dechallenge_resolved TEXT,
         rechallenge TEXT,
         alternative TEXT,
         narrative   TEXT,
@@ -45,16 +46,16 @@ def create_tables():
     conn.close()
 
 
-def save_case(drug, age, sex, region, time_onset, dechallenge,rechallenge, alternative, narrative, category, confidence, score):
+def save_case(drug, age, sex, region, time_onset, dechallenge, dechallenge_resolved,rechallenge, alternative, narrative, category, confidence, score):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     #insert data into the tables
     cursor.execute('''
         INSERT INTO cases
-        (drug, age, sex, region, time_onset, dechallenge,rechallenge, alternative, narrative, category, confidence, score)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
-    ''',(drug, age, sex, region, time_onset, dechallenge,rechallenge, alternative, narrative, category, confidence, score))
+        (drug, age, sex, region, time_onset, dechallenge, dechallenge_resolved,rechallenge, alternative, narrative, category, confidence, score)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+    ''',(drug, age, sex, region, time_onset, dechallenge, dechallenge_resolved,rechallenge, alternative, narrative, category, confidence, score))
     
     case_id = cursor.lastrowid
     conn.commit()
@@ -111,8 +112,9 @@ def get_case_by_id(case_id):
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT id, drug, age, sex, region, time_onset, dechallenge, rechallenge, alternative, narrative,
-        category, confidence, score, created_at
+        SELECT id, drug, age, sex, region, time_onset,
+               dechallenge, dechallenge_resolved, rechallenge, alternative, narrative,
+               category, confidence, score, created_at
         FROM cases WHERE id = ?
     ''', (case_id,))
 
@@ -124,18 +126,19 @@ def get_case_by_id(case_id):
         return None
 
     return {
-        'id': row[0],
-        'drug': row[1],
-        'age': row[2],
-        'sex': row[3],
-        'region': row[4],
-        'time_onset': row[5],
-        'dechallenge': row[6],
-        'rechallenge':row[7],
-        'alternative': row[8],
-        'narrative': row[9],
-        'category': row[10],
-        'confidence': row[11],
-        'score': row[12],
-        'created_at': row[13]
+        'id':                   row[0],
+        'drug':                 row[1],
+        'age':                  row[2],
+        'sex':                  row[3],
+        'region':               row[4],
+        'time_onset':           row[5],
+        'dechallenge':          row[6],
+        'dechallenge_resolved': row[7],
+        'rechallenge':          row[8],
+        'alternative':          row[9],
+        'narrative':            row[10],
+        'category':             row[11],
+        'confidence':           row[12],
+        'score':                row[13],
+        'created_at':           row[14]
     }

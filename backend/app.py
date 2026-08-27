@@ -6,6 +6,41 @@ app = Flask(__name__)
 
 SCREENS = os.path.join(os.path.dirname(__file__), '..', 'screens')
 
+def build_breakdown(case):
+    dechallenge = (case.get('dechallenge') or '').lower()
+    rechallenge = (case.get('rechallenge') or '').lower()
+    criteria = []
+
+    if dechallenge == 'positive':
+        criteria.append({'label': 'Positive dechallenge', 'detail': 'Symptoms resolved after withdrawal', 'weight': 3})
+    elif dechallenge == 'negative':
+        criteria.append({'label': 'Negative dechallenge', 'detail': 'Symptoms persisted after withdrawal', 'weight': -1})
+
+    if rechallenge == 'positive':
+        criteria.append({'label': 'Positive rechallenge', 'detail': 'Reaction recurred on re-exposure', 'weight': 3})
+
+    if case.get('time_onset'):
+        criteria.append({'label': 'Time to onset recorded', 'detail': case['time_onset'], 'weight': 1})
+
+    if case.get('narrative'):
+        criteria.append({'label': 'Clinical narrative provided', 'detail': 'Free-text description available', 'weight': 1})
+
+    if case.get('alternative'):
+        criteria.append({'label':'Alternative cause present', 'detail': case['alternative'], 'weight': -1})
+
+    return criteria
+
+#dechallenge scoring method
+def score_dechallenge(performed, resolved):
+    p = (performed or '').strip().lower()
+    r = (resolved or '').strip().lower()
+
+    if p == 'yes' and r == 'yes': return 3
+    if p == 'yes' and r == 'no': return -1
+    if p == 'yes': return 1
+    if p == 'no' and r == 'yes': return -1 #we will need SFDA confirmation
+    return 0
+
 #routing/mapping homepage url
 @app.route('/')
 def home():
@@ -25,6 +60,7 @@ def assess():
     data = request.get_json()
 
     dechallenge = data.get('dechallenge', 'unknown')
+    dechallenge_resolved = data.get('dechallenge_resolved', '')
     rechallenge = data.get('rechallenge', 'unknown')
     time_to_onset = data.get('time_to_onset', '')
     alternative = data.get('alternative_cause', '')
@@ -37,15 +73,12 @@ def assess():
     
     #check if dechallenge has a real value 
     #check if has_evidence is true
-    has_dechallenge = dechallenge in ('positive', 'negative')
+    has_dechallenge = (dechallenge or '').strip().lower() in ('yes', 'no')
     has_rechallenge = rechallenge in ('positive', 'negative')
     has_evidence = has_dechallenge or has_rechallenge or time_to_onset or narrative
 
     score = 0
-    if dechallenge == 'positive':
-        score += 3
-    elif dechallenge == 'negative':
-        score -= 1
+    score += score_dechallenge(dechallenge, dechallenge_resolved)
     if rechallenge == 'positive':
         score += 3
     if time_to_onset:
@@ -81,6 +114,7 @@ def assess():
         region = region,
         time_onset = time_to_onset,
         dechallenge = dechallenge,
+        dechallenge_resolved = dechallenge_resolved,
         rechallenge = rechallenge,
         alternative = alternative,
         narrative = narrative,
@@ -132,7 +166,7 @@ def get_case(case_id):
 
     if case is None:
         return jsonify({'success': False, 'message':'Case not found'}), 404
-
+    case['breakdown'] = build_breakdown(case)
     return jsonify(case)
 
 @app.route('/api/upload', methods=['POST'])
@@ -177,6 +211,7 @@ def upload_excel():
             region = str(data.get('region', '')or '').strip()
             time_onset = str(data.get('time_to_onset', '') or '').strip()
             dechallenge = str(data.get('dechallenge', 'unknown') or 'unknown').strip().lower()
+            dechallenge_resolved = str(data.get('dechallenge_resolved', '') or '').strip().lower()
             rechallenge = str(data.get('rechallenge', 'unknown') or 'unknown').strip().lower()
             alternative = str(data.get('alternalive_cause', '') or '').strip()
             narrative = str(data.get('narrative', '') or '').strip()
@@ -184,16 +219,13 @@ def upload_excel():
 
             #check if dechallenge has a real value 
             #check if has_evidence is true
-            has_dechallenge = dechallenge in ('positive', 'negative')
+            has_dechallenge = dechallenge in ('yes', 'no')
             has_rechallenge = rechallenge in ('positive', 'negative')
             has_evidence = has_dechallenge or has_rechallenge or time_onset or narrative
 
             #scoring logic same as assess() applied to each row
             score = 0
-            if dechallenge == 'positive':
-                score += 3
-            if dechallenge == 'negative':
-                score -= 1
+            score += score_dechallenge(dechallenge, dechallenge_resolved)
             if rechallenge == 'positive':
                 score += 3
             if time_onset:
@@ -232,6 +264,7 @@ def upload_excel():
                 region = region,
                 time_onset= time_onset,
                 dechallenge= dechallenge,
+                dechallenge_resolved = dechallenge_resolved,
                 rechallenge = rechallenge,
                 alternative = alternative,
                 narrative= narrative,

@@ -758,14 +758,14 @@
 
       <!-- SHAP EXPLAINABILITY -->
       <div class="shap-section">
-        <div class="section-title">SHAP explainability — feature contributions to prediction</div>
-        <div class="shap-legend">
+<div class="section-title">Scoring breakdown WHO–UMC criteria applied to this case</div>        <div class="shap-legend">
           <div class="shap-legend-item">
-            <div class="shap-legend-dot pos"></div> Increases probability
+            <div class="shap-legend-dot pos"></div> Supports causality
           </div>
           <div class="shap-legend-item">
-            <div class="shap-legend-dot neg"></div> Decreases probability
+            <div class="shap-legend-dot neg"></div> Weakens causality
           </div>
+          <div id=""breakdown-rows></div>
         </div>
 
         <!-- Positive contributors -->
@@ -1033,7 +1033,7 @@
     }
 
 function displayCase(c) {
-      // ── Verdict card ──
+      //verdict card
       const vc = document.querySelector('.verdict-category');
       if (vc) vc.textContent = c.category;
 
@@ -1043,25 +1043,54 @@ function displayCase(c) {
       const vs = document.querySelector('.verdict-sub');
       if (vs) vs.textContent = 'Score: ' + c.score + ' · Rule-based WHO–UMC engine';
 
-      // ── Header chips ──
+      //header chips
       const chips = document.querySelectorAll('.case-chip');
       if (chips[0]) chips[0].textContent = c.drug || '—';
-      if (chips[1]) chips[1].textContent = '—';                                    // adverse event — not stored
+      if (chips[1]) chips[1].textContent = '—'; //adverse event                                    
       if (chips[2]) chips[2].textContent = (c.sex || '—') + ', ' + (c.age || '—') + ' y';
       if (chips[3]) chips[3].textContent = c.region || '—';
 
-      // ── Case summary panel ──
+      //summary panel 
       const rows = document.querySelectorAll('.summary-val');
-      if (rows[0]) rows[0].textContent = 'ICSR-' + String(c.id).padStart(4, '0');  // case ID
-      if (rows[1]) rows[1].textContent = c.drug || '—';                            // suspect drug
-      if (rows[2]) rows[2].textContent = '—';                                      // adverse event — not stored
+      if (rows[0]) rows[0].textContent = 'ICSR-' + String(c.id).padStart(4, '0'); //case ID 
+      if (rows[1]) rows[1].textContent = c.drug || '—';                            
+      if (rows[2]) rows[2].textContent = '—'; //adverse event                                      
       if (rows[3]) rows[3].textContent = (c.sex || '—') + ', ' + (c.age || '—') + ' · ' + (c.region || '—');
-      if (rows[4]) rows[4].textContent = c.time_onset  || '—';                     // time to onset
+      if (rows[4]) rows[4].textContent = c.time_onset  || '—';                     
       if (rows[5]) rows[5].textContent = c.dechallenge || '—';
       if (rows[6]) rows[6].textContent = c.rechallenge || '—';
-      if (rows[7]) rows[7].textContent = '—';                                      // outcome — not stored
-      if (rows[8]) rows[8].textContent = '—';                                      // reporter — not stored
-      if (rows[9]) rows[9].textContent = c.category;                               // AI prediction
+      if (rows[7]) rows[7].textContent = '—'; //outcome                                      
+      if (rows[8]) rows[8].textContent = '—'; //reporter                                      
+      if (rows[9]) rows[9].textContent = c.category;   
+      
+      displayBreakdown(c.breakdown || []);
+    }
+
+    function displayBreakdown(criteria){
+      const container = document.getElementById('breakdown-rows');
+      if(!container) return;
+
+      container.innerHTML = '';
+
+      criteria.forEach(c => {
+        const positive = c.weight > 0;
+        //converting weight to bat width *25 mapping a weight of 1 as 25% and 3 to 75%
+        //the bar length stays propotional to how much the critertion happened
+        //assumes max weight is 3 which is a heavier creitrion would overflow the track
+        const width = Math.abs(c.weight) * 25;
+
+        container.innerHTML += `
+                  <div class="shap-row">
+            <div>
+              <div class="shap-feature">${c.label}</div>
+              <div class="shap-feature-sub">${c.detail}</div>
+            </div>
+            <div class="shap-bar-wrap" ${positive ? '' : 'style="justify-content:flex-end"'}>
+              <div class="${positive ? 'shap-pos-bar' : 'shap-neg-bar'}" style="width:${width}%"></div>
+            </div>
+            <div class="shap-val ${positive ? 'pos' : 'neg'}">${positive ? '+' : ''}${c.weight}</div>
+          </div>`;
+      });
     }
 
     function selectOpt(el) {
