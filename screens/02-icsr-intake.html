@@ -428,6 +428,7 @@
           <span class="format-col required">sex *</span>
           <span class="format-col required">time_to_onset *</span>
           <span class="format-col required">dechallenge *</span>
+          <span class="format-col required">dechallenge_resolved *</span>
           <span class="format-col">region</span>
           <span class="format-col">rechallenge</span>
           <span class="format-col">alternative_cause</span>
@@ -435,8 +436,10 @@
           <span class="format-col">reporter</span>
         </div>
         <div style="margin-top:10px;font-size:11px;color:var(--w-stone-gray);">
-          <span style="color:var(--w-terracotta);font-weight:500;">*</span> Required columns &nbsp;·&nbsp; dechallenge values: <code style="font-family:var(--font-mono)">positive / negative / unknown</code>
-        </div>
+          <span style="color:var(--w-terracotta);font-weight:500;">*</span> Required columns &nbsp;·&nbsp;
+          <code style="font-family:var(--font-mono)">dechallenge</code> and
+          <code style="font-family:var(--font-mono)">dechallenge_resolved</code> values:
+          <code style="font-family:var(--font-mono)">Yes / No / Unknown</code>        </div>
       </div>
 
       <!-- UPLOAD ACTIONS -->
@@ -465,7 +468,7 @@
               <th>Drug</th>
               <th>Age / Sex</th>
               <th>Time to onset</th>
-              <th>Dechallenge</th>
+              <th>Dechallenge / Resolved<</th>
               <th>Rechallenge</th>
               <th>WHO–UMC Category</th>
               <th>Confidence</th>
@@ -591,7 +594,7 @@
           <td style="font-weight:500">${c.drug || '—'}</td>
           <td>${c.age || '—'} · ${c.sex || '—'}</td>
           <td>${c.time_onset || '—'}</td>
-          <td>${c.dechallenge || '—'}</td>
+          <td>${(c.dechallenge || '—')} / ${(c.dechallenge_resolved || '—')}</td>
           <td>${c.rechallenge || '—'}</td>
           <td><span class="cat-pill cat-${getCatClass(c.category)}">${c.category}</span></td>
           <td>

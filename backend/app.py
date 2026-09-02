@@ -292,6 +292,7 @@ def upload_excel():
                 'region': region,
                 'time_onset': time_onset,
                 'dechallenge': dechallenge,
+                'dechallenge_resolved': dechallenge_resolved,
                 'rechallenge': rechallenge,
                 'alternative': alternative,
                 'category': category,
