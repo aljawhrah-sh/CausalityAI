@@ -210,6 +210,19 @@ print("\nUnique report IDs after dedup:", cleaned_df["report ID"].nunique())
 print("\nVerdict distribution after dedup:")
 print(cleaned_df["verdict_normalized"].value_counts())
 
+# Remove reports excluded during cross-column validation (Pregnancy = Yes with Sex = Male)
+flags = pd.read_csv("review_flags.csv")
+removed_ids = flags[flags["reason"].str.contains("REMOVED", na=False)]["report ID"].unique()
+
+before = len(cleaned_df)
+cleaned_df = cleaned_df[~cleaned_df["report ID"].isin(removed_ids)]
+print(f"\nRemoved {len(removed_ids)} flagged reports → {before - len(cleaned_df)} rows dropped")
+
+# One assessment per drug-event pair: keep the first, as per the agreed rule
+before = len(cleaned_df)
+cleaned_df = cleaned_df.drop_duplicates(subset=["report ID", "drug", "reaction"], keep="first")
+print(f"Resolved duplicate drug-event pairs: {before - len(cleaned_df)} rows dropped")
+
 # Check whether the drug and reaction cells hold stacked values
 multi = cleaned_df[cleaned_df["reaction"].astype(str).str.contains("_x000D_", na=False)]
 print("Rows where reaction cell holds stacked values:", len(multi))
@@ -294,6 +307,16 @@ print(f"\nUnique sources still 'Other': {len(other_sources)}")
 print("\nSample:")
 for s in sorted(other_sources)[:30]:
     print(" ", s)
+
+
+# Align column names with the merge convention agreed with the team
+cleaned_df = cleaned_df.rename(columns={
+    "drug": "WHODrug active ingredient variant",
+    "reaction": "MedDRA preferred term",
+})
+
+print("\nFinal verdict distribution:")
+print(cleaned_df["verdict_normalized"].value_counts())
 
 # save the cleaned table to an Excel file
 cleaned_df.to_excel("causality_cleaned.xlsx", index=False)
