@@ -98,5 +98,38 @@ dates_df.loc[invalid_idx, "date_sequence_invalid"] = True
 print("\nRows flagged for invalid date sequence:",
       dates_df["date_sequence_invalid"].sum())
 
+# Remove reports excluded during cross-column validation
+flags = pd.read_csv("review_flags.csv")
+removed_ids = flags[flags["reason"].str.contains("REMOVED", na=False)]["report ID"].unique()
+
+before = len(dates_df)
+dates_df = dates_df[~dates_df["report ID"].isin(removed_ids)]
+print(f"\nRemoved {len(removed_ids)} flagged reports → {before - len(dates_df)} rows dropped")
+
+# Collapse to one row per (report, reaction): earliest start, latest end,
+# so the row spans the full episode
+before = len(dates_df)
+dates_df = (
+    dates_df
+    .groupby(["report ID", "meddra_term"], as_index=False)
+    .agg({
+        "reaction_start": "min",
+        "reaction_end": "max",
+        "start_unaligned": "max",
+        "end_unaligned": "max",
+        "start_precision": "first",
+        "end_precision": "first",
+        "date_sequence_invalid": "max",
+    })
+)
+print(f"Collapsed to one row per report+reaction: {before} → {len(dates_df)}")
+
+# Align column names with the merge convention agreed with the team
+dates_df = dates_df.rename(columns={
+    "meddra_term": "MedDRA preferred term",
+    "reaction_start": "Reaction start date",
+    "reaction_end": "Reaction end date",
+})
+
 dates_df.to_excel("reaction_dates_cleaned.xlsx", index=False)
 print("\nSaved to reaction_dates_cleaned.xlsx")

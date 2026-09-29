@@ -3,7 +3,7 @@
 Decisions applied when cleaning the causality and reaction columns, with the
 rationale behind each and the number of rows affected.
 
-All decisions below were put to the authority and confirmed without changes.
+
 
 ---
 
@@ -63,9 +63,9 @@ Suspect/Interacting drugs" column records 48 drugs for this same case, which
 does not match the 4 actually present — noted for the team member handling
 that column.)
 
-**Affects.** 1,759 rows removed; 22,043 retained.
+**Affects.** 1,759 rows removed.
 
-**Implemented in.** `clean_causality.py` — the `drop_duplicates` call.
+**Implemented in.** `clean_causality.py` — the first `drop_duplicates` call.
 
 ---
 
@@ -79,7 +79,7 @@ the outcome to describe and no way to recover what the reaction was.
 
 **Affects.** 385 rows.
 
-**Implemented in.** `clean_reactions.py` — the filter on `meddra_term.notna()`.
+**Implemented in.** `clean_reactions.py` — the filter on the reaction column.
 
 ---
 
@@ -96,8 +96,6 @@ unassigned date is preferable to a wrong one. The flag preserves the
 distinction between "no date recorded" and "date recorded but unmatchable".
 
 **Affects.** Start dates unassigned in 15,421 source rows; end dates in 31,359.
-In the output: 12,110 rows flagged `start_unaligned`, 8,059 flagged
-`end_unaligned`.
 
 **Second decision.** Partial dates are kept as recorded rather than padded to
 a full date — year-and-month (5,902) and year-only (4,489) — with a precision
@@ -110,17 +108,99 @@ conditions.
 
 ## 6. Level at which "first assessment" applies
 
-**Decision.** Take the first WHO-UMC assessment per row, i.e. per drug–event
-pair, rather than per case.
+**Decision.** Take the first WHO-UMC assessment per drug–event pair, rather
+than per case.
 
 **Rationale.** In pharmacovigilance, causality is assessed for each drug–event
 pair separately: within one case, one drug may be strongly linked to a given
 reaction while another is not. The authority's framing of the question ("for
 the same drug–event pair") supports this reading.
 
-**Affects.** 22,043 rows. Applying it per case would yield roughly 12,377.
-
 **Implemented in.** `clean_causality.py` — the `break` in the build loop.
+
+---
+
+## 7. Reports excluded during cross-column validation
+
+**Decision.** Remove the 34 reports flagged in `review_flags.csv` from all
+three output tables.
+
+**Rationale.** Those reports record `Pregnancy case = Yes` together with
+`Sex = Male`, a combination that cannot occur. They were removed from the
+case-level tables by the team member handling those columns, so keeping
+them here would leave the tables inconsistent at merge time.
+
+**Affects.** 23 rows in the causality table, 109 rows in each of the reaction
+and date tables.
+
+**Implemented in.** All three `clean_*` scripts — the filter on
+`review_flags.csv`.
+
+---
+
+## 8. Duplicate drug–event pairs with differing assessments
+
+**Decision.** Where the same report, drug and reaction carry more than one
+WHO-UMC assessment, keep the first and drop the rest.
+
+**Rationale.** Removing only identical rows (decision 3) left pairs that
+repeat with a different verdict or source. The rule already agreed with the
+authority — first WHO-UMC assessment in order — resolves them consistently
+rather than excluding the pair altogether.
+
+**Affects.** 25 rows.
+
+**Implemented in.** `clean_causality.py` — the second `drop_duplicates` call.
+
+---
+
+## 9. Collapsing to one row per key
+
+**Decision.** Collapse the reaction and date tables so each is unique on
+`report ID` + `MedDRA preferred term`. Raw reporter terms and UMC codes are
+joined by a pipe with a count in `n_raw_terms`; dates take the earliest start
+and the latest end.
+
+**Rationale.** The same reaction can appear more than once in a case when the
+reporter described it in different words — "Generalized itching" and "Itchy
+scalp" both map to Pruritus. Left as-is, a merge on the key silently
+multiplies rows; this happened on another table during the merge stage and
+inflated it by 1.61 times. Taking the earliest start and latest end keeps the
+row spanning the full episode. The pipe was verified absent from every source
+value before use, so the joined fields can be split again if needed.
+
+**Affects.** Reaction table 96,500 → 95,828; date table 96,935 → 95,828.
+
+**Implemented in.** `clean_reactions.py` and `clean_dates.py` — the `groupby`
+calls.
+
+---
+
+## 10. Outcome as a single graded value
+
+**Decision.** Where a collapsed row carries several outcomes, `Outcome` holds
+the most severe one and `Outcome_all` keeps the full list. Severity order:
+
+> Died > Not recovered > Recovered with sequelae > Recovering > Recovered > Unknown
+
+**Rationale.** Merging outcomes into one pipe-separated field would break the
+column as a categorical feature, giving the model dozens of compound classes
+instead of six. Where two episodes of the same reaction ended differently, the
+more severe one is the accurate description of the case.
+
+The placement of "Recovered with sequelae" was discussed: it denotes a final
+state with permanent harm, so it ranks above "Recovering", whose trajectory is
+still open. Ranking it below "Not recovered" is the team's judgement, on the
+basis that an unresolved case may still worsen — recorded here as an
+assumption rather than a settled fact. It affects 674 rows, under 1%.
+
+The ranking is checked against the values actually present in the column at
+run time, and any unranked value raises a warning rather than failing
+silently. No warning was raised: the column holds exactly the six expected
+values with no spelling variants.
+
+**Implemented in.** `clean_reactions.py` — the `severity_order` list and the
+`most_severe` function.
 
 ---
 
@@ -140,12 +220,4 @@ alignment holds across the rest.
 against a start date of 2023-11-17. Flagged in `date_sequence_invalid`, not
 corrected, since there is no way to tell which of the two years is wrong.
 
----
 
-## Notes passed to other team members
-
-**Completeness score.** One row in the Case sheet holds "Yes" in a column that
-otherwise contains decimal values between 0 and 1.
-
-**Number of Suspect/Interacting drugs.** Records 48 drugs for report ID 6,
-against the 4 drugs actually present in that case.
