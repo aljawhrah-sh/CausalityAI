@@ -1,0 +1,15 @@
+# Data files - never published
+*.xlsx
+*.xls
+*.csv
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environments
+.venv/
+venv/
