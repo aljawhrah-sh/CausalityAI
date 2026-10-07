@@ -434,11 +434,26 @@ def explode_drug_level(df):
             if pd.notna(role) and role.strip().lower() not in VALID_ROLES:
                 flags.append((rid, f"unrecognized/possibly concatenated Role value: '{role}'"))
 
+        # Position-based alignment is only trustworthy when a column holds
+        # exactly as many values as there are drugs. Where a row lists 5 drugs
+        # but only 3 doses, there is no way to know which two drugs are the
+        # ones missing a dose, so the i-th dose does NOT belong to the i-th
+        # drug. Those values are left Unknown and flagged rather than attached
+        # to the wrong drug — the same rule the reaction-date cleaning applies
+        # to its date columns.
+        aligned = {}
+        for c in DRUG_STACK_COLS:
+            vals = split_cols[c]
+            aligned[c] = (not vals) or len(vals) == actual_n
+            if vals and not aligned[c]:
+                flags.append((rid, f"{c}: {len(vals)} value(s) for {actual_n} drug(s) — "
+                                    f"cannot be matched by position, set to Unknown"))
+
         n = actual_n
         for i in range(n):
             def get(col):
                 vals = split_cols[col]
-                if not vals:
+                if not vals or not aligned[col]:
                     return np.nan
                 return vals[i] if i < len(vals) else np.nan
 

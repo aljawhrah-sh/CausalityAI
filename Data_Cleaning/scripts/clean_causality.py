@@ -142,6 +142,15 @@ for idx, row in df.iterrows():
                 "verdict_normalized": normalized,
                 "method": method,
                 "source": source,
+                # The three WHO-UMC criteria columns. They live only on this
+                # sheet, so if they are not carried here they are lost from the
+                # whole pipeline — and they are what the framework assesses on.
+                # Kept raw; normalised further down.
+                "Time-to-onset": row["Time-to-onset"],
+                "dechallenge_raw": row[
+                    "Dechallenge performed? / Reaction resolved/resolving?"],
+                "rechallenge_raw": row[
+                    "Rechallenge performed? / Reaction recurred?"],
             }
             break  # the first valid assessment only — stop here
 
@@ -309,10 +318,84 @@ for s in sorted(other_sources)[:30]:
     print(" ", s)
 
 
+# ---------------------------------------------------------------------------
+# Normalise the three WHO-UMC criteria columns
+#
+# Dechallenge and rechallenge are each recorded as two questions packed into
+# one cell, e.g. "Yes / No" = drug was withdrawn / reaction did not resolve.
+# They are split because the two halves carry different meaning: "No / Yes"
+# (reaction resolved without withdrawing the drug) argues AGAINST the drug,
+# while "Yes / Yes" argues for it. Collapsed into one field those two look
+# alike, which is exactly the mistake that has to be avoided.
+# ---------------------------------------------------------------------------
+PLACEHOLDERS = {"", "nan", "none", "-", "‒", "–", "—", "unknown", "unk"}
+
+
+def split_pair(value):
+    """'Yes / No' -> ('Yes', 'No'). Anything not a clear yes/no -> 'Unknown'."""
+    text = str(value) if pd.notna(value) else ""
+    halves = text.split("/")
+    out = []
+    for i in range(2):
+        half = halves[i].strip().lower() if i < len(halves) else ""
+        out.append({"yes": "Yes", "no": "No"}.get(half, "Unknown"))
+    return out[0], out[1]
+
+
+def tto_bucket(value):
+    """Time-to-onset text -> coarse bucket. The exact figure is written many
+    ways and in several units, so the bucket is what can be trusted."""
+    t = str(value).strip().lower() if pd.notna(value) else ""
+    if t in PLACEHOLDERS:
+        return "Unknown"
+    number = re.search(r"(\d+(?:[.,]\d+)?)", t)
+    if not number:
+        return "Unknown"
+    val = float(number.group(1).replace(",", "."))
+    if re.search(r"minute|\bmin\b|hour|\bhr\b|same day", t):
+        return "same day"
+    if re.search(r"day", t):
+        days = val
+    elif re.search(r"week", t):
+        days = val * 7
+    elif re.search(r"month", t):
+        days = val * 30
+    elif re.search(r"year", t):
+        days = val * 365
+    else:
+        return "Unknown"
+    if days < 1:
+        return "same day"
+    if days <= 7:
+        return "1-7 days"
+    if days <= 28:
+        return "1-4 weeks"
+    if days <= 182:
+        return "1-6 months"
+    return ">6 months"
+
+
+dechal = cleaned_df["dechallenge_raw"].apply(split_pair)
+cleaned_df["dechallenge_performed"] = [a for a, _ in dechal]
+cleaned_df["reaction_resolved"] = [b for _, b in dechal]
+
+rechal = cleaned_df["rechallenge_raw"].apply(split_pair)
+cleaned_df["rechallenge_performed"] = [a for a, _ in rechal]
+cleaned_df["reaction_recurred"] = [b for _, b in rechal]
+
+cleaned_df["time_to_onset_bucket"] = cleaned_df["Time-to-onset"].apply(tto_bucket)
+
+print("\nWHO-UMC criteria columns (now carried through):")
+for col in ["dechallenge_performed", "reaction_resolved", "rechallenge_performed",
+            "reaction_recurred", "time_to_onset_bucket"]:
+    counts = cleaned_df[col].value_counts()
+    print(f"  {col:<24} " + " | ".join(f"{k} {v:,}" for k, v in counts.items()))
+
 # Align column names with the merge convention agreed with the team
 cleaned_df = cleaned_df.rename(columns={
     "drug": "WHODrug active ingredient variant",
     "reaction": "MedDRA preferred term",
+    "Time-to-onset": "time_to_onset_raw",
 })
 
 print("\nFinal verdict distribution:")
