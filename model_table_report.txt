@@ -1,0 +1,61 @@
+=== Inputs ===
+  causality (labels)          21,995 rows   16 cols
+  case level                  49,966 rows   14 cols
+  drug level (merge-safe)     85,453 rows   14 cols
+  reactions                   95,828 rows    8 cols
+  reaction dates              95,828 rows    9 cols
+
+Target grain: 21,995 rows (one per WHO-UMC assessed drug-event pair)
+
+=== Joins (each asserts the row count) ===
+  case level                  21,995 rows   matched  21,995 (100.0%)
+  drug level                  21,995 rows   matched  21,995 (100.0%)
+  reactions                   21,995 rows   matched  21,463 (97.6%)
+  reaction dates              21,995 rows   matched  12,881 (58.6%)
+
+  all joins held at 21,995 rows  [PASS]
+
+=== Numeric coercion ===
+  Age                                  numeric for 21,220 rows (775 were 'Unknown' or unparseable)
+  Weight (kg)                          numeric for 11,201 rows (10,794 were 'Unknown' or unparseable)
+  Height (cm)                          numeric for  5,446 rows (16,549 were 'Unknown' or unparseable)
+  Completeness score                   numeric for 21,995 rows (0 were 'Unknown' or unparseable)
+  Number of Suspect/Interacting drugs  numeric for 21,995 rows (0 were 'Unknown' or unparseable)
+  n_raw_terms                          numeric for 21,953 rows (0 were 'Unknown' or unparseable)
+  n_drug_rows                          numeric for 21,995 rows (0 were 'Unknown' or unparseable)
+
+=== Label ===
+  Possible                       9,621  (43.7%)
+  Probable                       8,744  (39.8%)
+  Unlikely                       1,189  (5.4%)
+  Certain                          964  (4.4%)
+  Unassessable                     878  (4.0%)
+  Conditional                      599  (2.7%)
+
+  imbalance (largest : smallest) = 16 : 1
+  reports represented: 12,366
+  rows per report    : 1.78  <- the reason Phase 2 splits by report, not by row
+
+=== WHO-UMC criteria coverage ===
+  dechallenge_performed    known on  14,924 rows  (68%)
+  reaction_resolved        known on  17,341 rows  (79%)
+  rechallenge_performed    known on   1,990 rows  (9%)
+  reaction_recurred        known on   1,258 rows  (6%)
+  time_to_onset_bucket     known on  16,771 rows  (76%)
+
+=== Missingness across all columns (worst 12) ===
+  Pregnancy case                            98.3% missing
+  Fatal                                     97.4% missing
+  rechallenge_raw                           91.0% missing
+  Height (cm)                               75.2% missing
+  Weight (kg)                               49.1% missing
+  end_precision                             41.4% missing
+  Reaction end date                         41.4% missing
+  time_to_onset_raw                         23.8% missing
+  dechallenge_raw                           12.1% missing
+  Reaction start date                       11.2% missing
+  start_precision                           11.2% missing
+  age_years                                  3.5% missing
+
+=== Output ===
+  21,995 rows x 54 columns -> model_table.csv
