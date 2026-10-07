@@ -3,70 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CausalityAI — AI Assessment Result</title>
+  <title>CausalityAI — Assessment Result</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ─── HYBRID TOKENS ─────────────────────────────────────────────── */
     :root {
-      /* IBM Carbon structure */
-      --c-blue:        #0f62fe;
-      --c-blue-hover:  #0353e9;
-      --c-gray-100:    #161616;
-      --c-gray-90:     #262626;
-      --c-gray-80:     #393939;
-      --c-gray-70:     #525252;
       --c-gray-60:     #6f6f6f;
       --c-gray-30:     #c6c6c6;
-      --c-gray-20:     #e0e0e0;
       --c-gray-10:     #f4f4f4;
-      --c-green-50:    #24a148;
-      --c-red-60:      #da1e28;
-      --c-yellow-30:   #f1c21b;
 
-      /* Claude warmth */
       --w-parchment:   #f5f4ed;
       --w-ivory:       #faf9f5;
       --w-terracotta:  #c96442;
-      --w-coral:       #d97757;
       --w-near-black:  #141413;
       --w-olive-gray:  #5e5d59;
       --w-stone-gray:  #87867f;
-      --w-charcoal:    #4d4c48;
       --w-border-cream:#f0eee6;
       --w-border-warm: #e8e6dc;
       --w-warm-sand:   #e8e6dc;
       --w-dark-surf:   #30302e;
       --w-warm-silver: #b0aea5;
 
-      /* Linear precision */
-      --l-indigo:      #5e6ad2;
-      --l-violet:      #7170ff;
-      --l-border:      rgba(255,255,255,0.08);
-
-      /* PostHog */
       --p-sage-border: #bfc1b7;
-      --p-orange:      #F54E00;
 
-      /* Sentry */
-      --s-lime:        #c2ef4e;
-      --s-purple-dark: #1f1633;
+      --sp-4:  4px;  --sp-8:  8px;  --sp-12: 12px;
+      --sp-16: 16px; --sp-24: 24px; --sp-32: 32px;
 
-      /* Spacing (IBM 8px grid) */
-      --sp-2:  2px;  --sp-4:  4px;  --sp-8:  8px;
-      --sp-12: 12px; --sp-16: 16px; --sp-24: 24px;
-      --sp-32: 32px; --sp-48: 48px; --sp-64: 64px;
-
-      /* Typography */
       --font-serif: Georgia, serif;
       --font-sans:  'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
       --font-mono:  'IBM Plex Mono', 'Menlo', monospace;
-      --font-ui:    'Inter', system-ui, sans-serif;
     }
 
-    /* ─── RESET ─────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; -webkit-font-smoothing: antialiased; }
     body {
@@ -80,50 +49,39 @@
     .topnav {
       background: var(--w-near-black);
       height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0 var(--sp-32);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--w-dark-surf);
     }
     .nav-left { display: flex; align-items: center; gap: var(--sp-24); }
     .nav-logo {
-      font-family: var(--font-sans);
-      font-size: 14px;
-      font-weight: 500;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: var(--sp-8);
-      letter-spacing: 0.16px;
+      font-size: 14px; font-weight: 500; color: #fff;
+      display: flex; align-items: center; gap: var(--sp-8);
+      letter-spacing: 0.16px; text-decoration: none;
     }
-    .nav-logo-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--w-terracotta);
-    }
-    .nav-breadcrumb {
-      font-size: 13px;
-      color: var(--w-warm-silver);
-      letter-spacing: 0.16px;
-    }
+    .nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--w-terracotta); }
+    .nav-breadcrumb { font-size: 13px; color: var(--w-warm-silver); letter-spacing: 0.16px; }
     .nav-breadcrumb span { color: var(--c-gray-60); margin: 0 6px; }
     .nav-right { display: flex; align-items: center; gap: var(--sp-16); }
-    .nav-meta {
-      font-size: 12px;
-      color: var(--w-warm-silver);
-      letter-spacing: 0.32px;
-    }
+    .nav-meta { font-size: 12px; color: var(--w-warm-silver); letter-spacing: 0.32px; }
     .nav-avatar {
-      width: 28px; height: 28px;
-      border-radius: 50%;
+      width: 28px; height: 28px; border-radius: 50%;
       background: var(--w-terracotta);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 600; color: #fff;
-      letter-spacing: 0.5px;
+      font-size: 11px; font-weight: 600; color: #fff; letter-spacing: 0.5px;
+    }
+    .nav-new-btn {
+      background: var(--w-terracotta); color: #fff; border: none;
+      padding: 6px 14px; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.16px; cursor: pointer; border-radius: 0;
+      text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .signout-btn {
+      background: transparent; border: 1px solid rgba(255,255,255,0.15);
+      color: var(--w-warm-silver); padding: 4px 10px;
+      font-family: var(--font-sans); font-size: 11px;
+      letter-spacing: 0.16px; cursor: pointer; border-radius: 0;
     }
 
     /* ─── STEP BAR ───────────────────────────────────────────────────── */
@@ -132,52 +90,35 @@
       border-bottom: 1px solid var(--w-border-cream);
       padding: 0 var(--sp-32);
       display: flex;
-      gap: 0;
     }
     .step {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--w-stone-gray);
+      font-size: 12px; color: var(--w-stone-gray);
       padding: 10px var(--sp-16);
       border-bottom: 2px solid transparent;
-      letter-spacing: 0.32px;
-      white-space: nowrap;
+      letter-spacing: 0.32px; white-space: nowrap; text-decoration: none;
     }
-    .step.done  { color: var(--w-olive-gray); border-bottom-color: var(--p-sage-border); }
-    .step.active{ color: var(--w-near-black); border-bottom-color: var(--w-terracotta); font-weight: 500; }
+    .step.done   { color: var(--w-olive-gray); border-bottom-color: var(--p-sage-border); }
+    .step.active { color: var(--w-near-black); border-bottom-color: var(--w-terracotta); font-weight: 500; }
 
     /* ─── CASE HEADER BAND ───────────────────────────────────────────── */
     .case-band {
       background: var(--w-ivory);
       border-bottom: 1px solid var(--w-border-warm);
       padding: var(--sp-12) var(--sp-32);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: var(--sp-8);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: var(--sp-8);
     }
     .case-id {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--w-near-black);
-      letter-spacing: 0.16px;
+      font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+      color: var(--w-near-black); letter-spacing: 0.16px;
     }
     .case-meta-row { display: flex; align-items: center; gap: var(--sp-16); flex-wrap: wrap; }
     .case-chip {
-      font-size: 11px;
-      color: var(--w-olive-gray);
-      background: var(--w-warm-sand);
-      padding: 3px 8px;
-      border-radius: 24px;
-      letter-spacing: 0.16px;
+      font-size: 11px; color: var(--w-olive-gray);
+      background: var(--w-warm-sand); padding: 3px 8px;
+      border-radius: 24px; letter-spacing: 0.16px;
     }
-    .case-status {
-      font-size: 12px;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-    }
+    .case-status { font-size: 12px; color: var(--w-stone-gray); letter-spacing: 0.32px; }
 
     /* ─── MAIN LAYOUT ────────────────────────────────────────────────── */
     .main {
@@ -185,301 +126,185 @@
       grid-template-columns: 1fr 340px;
       min-height: calc(100vh - 130px);
     }
-
-    /* ─── LEFT PANEL ─────────────────────────────────────────────────── */
     .left-panel { padding: var(--sp-32); border-right: 1px solid var(--w-border-warm); }
 
-    /* Verdict card */
+    /* ─── VERDICT CARD ───────────────────────────────────────────────── */
     .verdict-card {
       background: var(--w-ivory);
       border: 1px solid var(--w-border-warm);
       border-left: 4px solid var(--w-terracotta);
-      border-radius: 0;
       padding: var(--sp-24);
       margin-bottom: var(--sp-32);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      display: flex; align-items: flex-start; justify-content: space-between;
       gap: var(--sp-24);
-      /* ring shadow — Claude pattern */
-      box-shadow: 0 0 0 0 var(--w-border-warm), rgba(0,0,0,0.04) 0px 4px 24px;
+      box-shadow: rgba(0,0,0,0.04) 0px 4px 24px;
     }
-    
     .verdict-eyebrow {
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-8);
+      font-size: 11px; color: var(--w-stone-gray);
+      letter-spacing: 0.32px; text-transform: uppercase; margin-bottom: var(--sp-8);
     }
     .verdict-category {
-      font-family: var(--font-serif);
-      font-size: 32px;
-      font-weight: 500;
-      color: var(--w-near-black);
-      line-height: 1.10;
-      margin-bottom: var(--sp-8);
+      font-family: var(--font-serif); font-size: 32px; font-weight: 500;
+      color: var(--w-near-black); line-height: 1.10; margin-bottom: var(--sp-8);
     }
-    .verdict-sub {
-      font-size: 13px;
-      color: var(--w-olive-gray);
-      letter-spacing: 0.16px;
-      line-height: 1.6;
-    }
+    .verdict-sub { font-size: 13px; color: var(--w-olive-gray); letter-spacing: 0.16px; line-height: 1.6; }
     .verdict-right { text-align: right; flex-shrink: 0; }
     .conf-circle {
-      width: 88px; height: 88px;
-      border-radius: 50%;
-      background: var(--w-warm-sand);
-      border: 3px solid var(--w-terracotta);
+      width: 88px; height: 88px; border-radius: 50%;
+      background: var(--w-warm-sand); border: 3px solid var(--w-terracotta);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      margin-bottom: var(--sp-8);
-      margin-left: auto;
+      margin-bottom: var(--sp-8); margin-left: auto;
     }
     .conf-num {
-      font-family: var(--font-mono);
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--w-near-black);
-      line-height: 1;
+      font-family: var(--font-mono); font-size: 22px; font-weight: 500;
+      color: var(--w-near-black); line-height: 1;
     }
     .conf-label {
-      font-size: 9px;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-top: 2px;
+      font-size: 9px; color: var(--w-stone-gray);
+      letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px;
     }
-    .who-badge {
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.16px;
+    .conf-note {
+      font-size: 10px; color: var(--w-stone-gray);
+      letter-spacing: 0.16px; line-height: 1.4; max-width: 130px; margin-left: auto;
     }
 
-    /* Section title */
     .section-title {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-16);
-      padding-bottom: var(--sp-8);
+      font-size: 11px; font-weight: 500; color: var(--w-stone-gray);
+      letter-spacing: 0.32px; text-transform: uppercase;
+      margin-bottom: var(--sp-8); padding-bottom: var(--sp-8);
       border-bottom: 1px solid var(--w-border-cream);
     }
+    .section-note {
+      font-size: 11px; color: var(--w-stone-gray);
+      letter-spacing: 0.16px; margin-bottom: var(--sp-16); line-height: 1.5;
+    }
 
-    /* ─── PROBABILITY DISTRIBUTION ───────────────────────────────────── */
-    .prob-section { margin-bottom: var(--sp-32); }
-    .prob-row {
-      display: flex;
-      align-items: center;
-      gap: var(--sp-12);
-      margin-bottom: var(--sp-12);
+    /* ─── SCORE SCALE ────────────────────────────────────────────────── */
+    .scale-section { margin-bottom: var(--sp-32); }
+    .scale-row {
+      display: grid;
+      grid-template-columns: 200px 130px 1fr;
+      align-items: center; gap: var(--sp-12);
+      padding: var(--sp-8) var(--sp-8);
+      border-bottom: 1px solid var(--w-border-cream);
     }
-    .prob-name {
-      font-size: 13px;
-      color: var(--w-near-black);
-      width: 160px;
-      flex-shrink: 0;
-      letter-spacing: 0.16px;
-    }
-    .prob-name.active { font-weight: 600; color: var(--w-near-black); }
-    .prob-track {
-      flex: 1;
-      height: 6px;
-      background: var(--w-border-cream);
-      border-radius: 0; /* IBM — no radius */
-      overflow: hidden;
-    }
-    .prob-fill {
-      height: 100%;
-      border-radius: 0;
-      transition: width 0.6s ease;
-    }
-    .prob-fill.active  { background: var(--w-terracotta); }
-    .prob-fill.high    { background: var(--w-coral); }
-    .prob-fill.mid     { background: var(--p-sage-border); }
-    .prob-fill.low     { background: var(--c-gray-20); }
-    .prob-pct {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--w-olive-gray);
-      width: 36px;
-      text-align: right;
-      letter-spacing: 0.16px;
-    }
-    .prob-pct.active { color: var(--w-near-black); font-weight: 500; }
+    .scale-row:last-child { border-bottom: none; }
+    .scale-name  { font-size: 13px; color: var(--w-olive-gray); letter-spacing: 0.16px; }
+    .scale-range { font-family: var(--font-mono); font-size: 11px; color: var(--w-stone-gray); }
+    .scale-marker{ font-size: 11px; color: var(--w-stone-gray); letter-spacing: 0.16px; }
+    .scale-row.active            { background: rgba(201,100,66,0.06); }
+    .scale-row.active .scale-name  { color: var(--w-near-black); font-weight: 600; }
+    .scale-row.active .scale-range { color: var(--w-near-black); }
+    .scale-row.active .scale-marker{ color: var(--w-terracotta); font-weight: 500; }
+    .scale-row.unreachable .scale-name,
+    .scale-row.unreachable .scale-range { color: var(--c-gray-30); }
 
-    /* ─── SHAP EXPLAINABILITY ─────────────────────────────────────────── */
-    .shap-section { margin-bottom: var(--sp-32); }
-    .shap-legend {
-      display: flex;
-      gap: var(--sp-16);
-      margin-bottom: var(--sp-16);
-    }
-    .shap-legend-item {
+    /* ─── BREAKDOWN ──────────────────────────────────────────────────── */
+    .breakdown-section { margin-bottom: var(--sp-32); }
+    .bd-legend { display: flex; gap: var(--sp-16); margin-bottom: var(--sp-16); }
+    .bd-legend-item {
       display: flex; align-items: center; gap: 6px;
       font-size: 11px; color: var(--w-stone-gray); letter-spacing: 0.16px;
     }
-    .shap-legend-dot {
-      width: 10px; height: 10px; border-radius: 0;
-    }
-    .shap-legend-dot.pos { background: var(--w-terracotta); }
-    .shap-legend-dot.neg { background: var(--c-gray-30); }
+    .bd-legend-dot { width: 10px; height: 10px; }
+    .bd-legend-dot.pos { background: var(--w-terracotta); }
+    .bd-legend-dot.neg { background: var(--c-gray-30); }
 
-    .shap-row {
+    .bd-row {
       display: grid;
-      grid-template-columns: 180px 1fr 56px;
-      align-items: center;
-      gap: var(--sp-12);
+      grid-template-columns: 240px 1fr 56px;
+      align-items: center; gap: var(--sp-12);
       padding: var(--sp-8) 0;
       border-bottom: 1px solid var(--w-border-cream);
     }
-    .shap-row:last-child { border-bottom: none; }
-    .shap-feature {
-      font-size: 12px;
-      color: var(--w-near-black);
-      letter-spacing: 0.16px;
-      line-height: 1.4;
-    }
-    .shap-feature-sub {
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      margin-top: 2px;
-    }
-    .shap-bar-wrap {
-      display: flex;
-      align-items: center;
-      height: 14px;
-      position: relative;
-    }
-    .shap-center { width: 1px; background: var(--p-sage-border); height: 100%; flex-shrink: 0; }
-    .shap-pos-bar {
-      height: 8px;
-      background: var(--w-terracotta);
-      border-radius: 0;
-    }
-    .shap-neg-bar {
-      height: 8px;
-      background: var(--c-gray-30);
-      border-radius: 0;
-      margin-left: auto;
-    }
-    .shap-val {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      text-align: right;
-      letter-spacing: 0.16px;
-    }
-    .shap-val.pos { color: var(--w-terracotta); font-weight: 500; }
-    .shap-val.neg { color: var(--c-gray-60); }
-    .shap-summary {
-  margin-top: 20px;
-  padding: 16px;
-  background: var(--w-ivory);
-  border-left: 3px solid var(--w-terracotta);
-  border: 1px solid var(--w-border-warm);
-}
+    .bd-row:last-child { border-bottom: none; }
+    .bd-feature { font-size: 12px; color: var(--w-near-black); letter-spacing: 0.16px; line-height: 1.4; }
+    .bd-feature-sub { font-size: 11px; color: var(--w-stone-gray); margin-top: 2px; }
+    .bd-bar-wrap { display: flex; align-items: center; height: 14px; }
+    .bd-pos-bar { height: 8px; background: var(--w-terracotta); }
+    .bd-neg-bar { height: 8px; background: var(--c-gray-30); margin-left: auto; }
+    .bd-val { font-family: var(--font-mono); font-size: 12px; text-align: right; letter-spacing: 0.16px; }
+    .bd-val.pos { color: var(--w-terracotta); font-weight: 500; }
+    .bd-val.neg { color: var(--c-gray-60); }
 
-.shap-summary-title {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--w-stone-gray);
-  text-transform: uppercase;
-  letter-spacing: 0.32px;
-  margin-bottom: 8px;
-}
+    .bd-total {
+      display: grid;
+      grid-template-columns: 240px 1fr 56px;
+      gap: var(--sp-12);
+      padding-top: var(--sp-12);
+      margin-top: var(--sp-8);
+      border-top: 2px solid var(--w-border-warm);
+    }
+    .bd-total-label { font-size: 12px; font-weight: 600; color: var(--w-near-black); letter-spacing: 0.16px; }
+    .bd-total-val {
+      font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+      color: var(--w-near-black); text-align: right;
+    }
+    .bd-empty {
+      font-size: 12px; color: var(--w-stone-gray);
+      letter-spacing: 0.16px; padding: var(--sp-16) 0; line-height: 1.6;
+    }
 
-.shap-summary-text {
-  font-size: 13px;
-  color: var(--w-olive-gray);
-  line-height: 1.6;
-  letter-spacing: 0.16px;
-}
-
-.shap-summary-text strong {
-  color: var(--w-terracotta);
-  font-weight: 500;
-}
-
-    /* NLP highlight */
-    .nlp-section { margin-bottom: var(--sp-16); }
-    .nlp-narrative {
+    /* ─── REASONING SUMMARY ──────────────────────────────────────────── */
+    .summary-box {
+      margin-top: var(--sp-24);
+      padding: var(--sp-16);
       background: var(--w-ivory);
       border: 1px solid var(--w-border-warm);
-      padding: var(--sp-16);
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--w-olive-gray);
-      letter-spacing: 0.16px;
-      border-radius: 0;
+      border-left: 3px solid var(--w-terracotta);
     }
-    .nlp-highlight-green {
-      background: rgba(36, 161, 72, 0.12);
-      color: #155724;
-      padding: 1px 3px;
-      border-radius: 2px;
+    .summary-box-title {
+      font-size: 11px; font-weight: 500; color: var(--w-stone-gray);
+      text-transform: uppercase; letter-spacing: 0.32px; margin-bottom: var(--sp-8);
     }
-    .nlp-highlight-orange {
-      background: rgba(201, 100, 66, 0.12);
-      color: var(--w-terracotta);
-      padding: 1px 3px;
-      border-radius: 2px;
-    }
-    .nlp-highlight-gray {
-      background: rgba(0,0,0,0.06);
-      color: var(--w-charcoal);
-      padding: 1px 3px;
-      border-radius: 2px;
-    }
-    .nlp-legend {
-      display: flex; gap: var(--sp-16); margin-top: var(--sp-8); flex-wrap: wrap;
-    }
-    .nlp-legend-item {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 11px; color: var(--w-stone-gray);
-    }
-    .nlp-dot { width: 8px; height: 8px; border-radius: 2px; }
+    .summary-box-text { font-size: 13px; color: var(--w-olive-gray); line-height: 1.6; letter-spacing: 0.16px; }
+    .summary-box-text strong { color: var(--w-terracotta); font-weight: 500; }
 
-    /* ─── RIGHT PANEL ─────────────────────────────────────────────────── */
+    /* ─── RIGHT PANEL ────────────────────────────────────────────────── */
     .right-panel {
       background: var(--w-ivory);
       padding: var(--sp-32) var(--sp-24);
       border-left: 1px solid var(--w-border-warm);
     }
+    .summary-card {
+      background: #fff; border: 1px solid var(--w-border-warm);
+      padding: var(--sp-16); margin-bottom: var(--sp-24);
+    }
+    .summary-title {
+      font-size: 11px; font-weight: 500; color: var(--w-stone-gray);
+      letter-spacing: 0.32px; text-transform: uppercase;
+      margin-bottom: var(--sp-12); padding-bottom: var(--sp-8);
+      border-bottom: 1px solid var(--w-border-cream);
+    }
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 5px 0; font-size: 12px;
+    }
+    .summary-key { color: var(--w-stone-gray); letter-spacing: 0.16px; }
+    .summary-val {
+      color: var(--w-near-black); font-weight: 500;
+      text-align: right; max-width: 55%; letter-spacing: 0.16px;
+    }
 
-    /* Override decision */
+    /* ─── ASSESSOR DECISION ──────────────────────────────────────────── */
     .override-section { margin-bottom: var(--sp-32); }
     .override-eyebrow {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-12);
+      font-size: 11px; font-weight: 500; color: var(--w-stone-gray);
+      letter-spacing: 0.32px; text-transform: uppercase; margin-bottom: var(--sp-12);
     }
     .override-options { display: flex; flex-direction: column; gap: var(--sp-8); margin-bottom: var(--sp-16); }
     .opt {
       display: flex; align-items: center; gap: var(--sp-12);
-      padding: var(--sp-12) var(--sp-12);
+      padding: var(--sp-12);
       border: 1px solid var(--w-border-warm);
-      background: #fff;
-      cursor: pointer;
+      background: #fff; cursor: pointer;
       transition: all 0.15s ease;
-      font-size: 13px;
-      color: var(--w-near-black);
-      letter-spacing: 0.16px;
-      border-radius: 0; /* IBM */
+      font-size: 13px; color: var(--w-near-black);
+      letter-spacing: 0.16px; border-radius: 0;
     }
     .opt:hover { background: var(--w-warm-sand); border-color: var(--p-sage-border); }
-    .opt.selected {
-      border-color: var(--w-terracotta);
-      background: rgba(201,100,66,0.06);
-      color: var(--w-near-black);
-    }
+    .opt.selected { border-color: var(--w-terracotta); background: rgba(201,100,66,0.06); }
     .opt-radio {
       width: 14px; height: 14px;
       border: 2px solid var(--p-sage-border);
@@ -487,136 +312,39 @@
       display: flex; align-items: center; justify-content: center;
     }
     .opt.selected .opt-radio { border-color: var(--w-terracotta); }
-    .opt-radio-inner {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--w-terracotta);
-      display: none;
-    }
+    .opt-radio-inner { width: 6px; height: 6px; border-radius: 50%; background: var(--w-terracotta); display: none; }
     .opt.selected .opt-radio-inner { display: block; }
     .opt-label { flex: 1; }
-    .opt-conf {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--w-stone-gray);
-    }
 
-    /* Reasoning textarea */
     .reasoning-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--w-olive-gray);
-      letter-spacing: 0.32px;
-      margin-bottom: var(--sp-8);
-      display: block;
+      font-size: 12px; font-weight: 500; color: var(--w-olive-gray);
+      letter-spacing: 0.32px; margin-bottom: var(--sp-8); display: block;
     }
     .reasoning-box {
-      width: 100%;
-      background: var(--c-gray-10); /* IBM form field */
-      border: none;
-      border-bottom: 2px solid var(--c-gray-30);
+      width: 100%; background: var(--c-gray-10);
+      border: none; border-bottom: 2px solid var(--c-gray-30);
       padding: var(--sp-12) var(--sp-16);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      color: var(--w-near-black);
-      line-height: 1.6;
-      resize: none;
-      min-height: 90px;
-      outline: none;
-      letter-spacing: 0.16px;
-      border-radius: 0; /* IBM */
+      font-family: var(--font-sans); font-size: 13px;
+      color: var(--w-near-black); line-height: 1.6;
+      resize: none; min-height: 90px; outline: none;
+      letter-spacing: 0.16px; border-radius: 0;
       transition: border-color 0.15s;
-      box-sizing: border-box;
     }
     .reasoning-box:focus { border-bottom-color: var(--w-terracotta); }
     .reasoning-box::placeholder { color: var(--c-gray-60); }
 
-    /* Submit button */
     .submit-btn {
-      width: 100%;
-      background: var(--w-near-black);
-      color: var(--w-ivory);
-      border: none;
-      padding: 14px var(--sp-16);
-      font-family: var(--font-sans);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.16px;
-      cursor: pointer;
-      border-radius: 0; /* IBM */
-      margin-top: var(--sp-16);
-      transition: background 0.15s, color 0.15s;
+      width: 100%; background: var(--w-near-black); color: var(--w-ivory);
+      border: none; padding: 14px var(--sp-16);
+      font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+      letter-spacing: 0.16px; cursor: pointer; border-radius: 0;
+      margin-top: var(--sp-16); transition: background 0.15s;
     }
     .submit-btn:hover { background: var(--w-terracotta); color: #fff; }
-
     .audit-note {
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      text-align: center;
-      margin-top: var(--sp-8);
-      letter-spacing: 0.16px;
-      line-height: 1.5;
-    }
-
-    /* ─── CASE SUMMARY CARD ──────────────────────────────────────────── */
-    .summary-card {
-      background: #fff;
-      border: 1px solid var(--w-border-warm);
-      border-radius: 0;
-      padding: var(--sp-16);
-      margin-bottom: var(--sp-24);
-    }
-    .summary-title {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.32px;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-12);
-      padding-bottom: var(--sp-8);
-      border-bottom: 1px solid var(--w-border-cream);
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 5px 0;
-      font-size: 12px;
-    }
-    .summary-key { color: var(--w-stone-gray); letter-spacing: 0.16px; }
-    .summary-val { color: var(--w-near-black); font-weight: 500; text-align: right; max-width: 55%; letter-spacing: 0.16px; }
-
-    /* WHO-UMC category badge */
-    .who-cat-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 24px; /* pill — Linear */
-      font-weight: 500;
-      letter-spacing: 0.16px;
-    }
-    .cat-certain    { background: rgba(36,161,72,0.10); color: #155724; }
-    .cat-probable   { background: rgba(201,100,66,0.10); color: var(--w-terracotta); }
-    .cat-possible   { background: rgba(15,98,254,0.10); color: var(--c-blue); }
-    .cat-unlikely   { background: rgba(241,194,27,0.12); color: #7a5c00; }
-    .cat-cond       { background: rgba(0,0,0,0.06); color: var(--w-charcoal); }
-    .cat-unassess   { background: rgba(218,30,40,0.10); color: var(--c-red-60); }
-
-    /* Fairness flag */
-    .fairness-flag {
-      background: rgba(194, 239, 78, 0.15);
-      border: 1px solid rgba(194, 239, 78, 0.4);
-      border-left: 3px solid var(--s-lime);
-      padding: var(--sp-8) var(--sp-12);
-      margin-top: var(--sp-16);
-      font-size: 12px;
-      color: var(--w-charcoal);
-      line-height: 1.5;
-      letter-spacing: 0.16px;
-    }
-    .fairness-flag strong {
-      color: #3a5c00;
-      font-weight: 600;
+      font-size: 11px; color: var(--w-stone-gray);
+      text-align: center; margin-top: var(--sp-8);
+      letter-spacing: 0.16px; line-height: 1.5;
     }
 
     /* ─── FOOTER ─────────────────────────────────────────────────────── */
@@ -624,28 +352,14 @@
       background: var(--w-ivory);
       border-top: 1px solid var(--w-border-warm);
       padding: var(--sp-12) var(--sp-32);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--w-stone-gray);
-      letter-spacing: 0.16px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; color: var(--w-stone-gray); letter-spacing: 0.16px;
     }
-    .footer-model {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--w-stone-gray);
-    }
+    .footer-model { font-family: var(--font-mono); font-size: 11px; color: var(--w-stone-gray); }
 
-    /* ─── UTILITIES ──────────────────────────────────────────────────── */
-    .mt-8  { margin-top: var(--sp-8); }
-    .mt-16 { margin-top: var(--sp-16); }
-    .mt-24 { margin-top: var(--sp-24); }
-    .mb-8  { margin-bottom: var(--sp-8); }
-    .flex  { display: flex; }
+    .flex { display: flex; }
     .items-center { align-items: center; }
-    .gap-8 { gap: var(--sp-8); }
-    .gap-16{ gap: var(--sp-16); }
+    .gap-16 { gap: var(--sp-16); }
   </style>
 </head>
 
@@ -654,45 +368,42 @@
   <!-- TOP NAV -->
   <nav class="topnav">
     <div class="nav-left">
-      <a class="nav-logo" href="03-dashboard.html" style="text-decoration:none;color:#fff;">
+      <a class="nav-logo" href="/screens/03-dashboard.html">
         <div class="nav-logo-dot"></div>
         CausalityAI
       </a>
       <div class="nav-breadcrumb">
-        <a href="03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
-        <span>›</span>
-        <a href="02-icsr-intake.html" style="color:var(--w-warm-silver);text-decoration:none;">New ICSR</a>
-        <span>›</span> Result
+        <a href="/screens/03-dashboard.html" style="color:var(--w-warm-silver);text-decoration:none;">Dashboard</a>
+        <span>&rsaquo;</span> Assessment result
       </div>
     </div>
     <div class="nav-right">
-      <div class="nav-meta">N A · SFDA · April 2025</div>
-      <a href="02-icsr-intake.html" style="background:var(--w-terracotta);color:#fff;border:none;padding:6px 14px;font-family:var(--font-sans);font-size:12px;font-weight:500;letter-spacing:0.16px;cursor:pointer;border-radius:0;text-decoration:none;display:inline-flex;align-items:center;">+ New ICSR</a>
+      <div class="nav-meta">N A &middot; SFDA</div>
+      <a class="nav-new-btn" href="/screens/02-icsr-intake.html">+ Upload ICSRs</a>
       <div class="nav-avatar">NA</div>
-      <button onclick="window.location.href='00-login.html'" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--w-warm-silver);padding:4px 10px;font-family:var(--font-sans);font-size:11px;letter-spacing:0.16px;cursor:pointer;border-radius:0;">Sign out</button>
+      <button class="signout-btn" onclick="window.location.href='/screens/00-login.html'">Sign out</button>
     </div>
   </nav>
 
   <!-- STEP BAR -->
   <div class="stepbar">
-    <a class="step done" href="02-icsr-intake.html" style="text-decoration:none;">1  Patient data</a>
-    <a class="step done" href="02-icsr-intake.html" style="text-decoration:none;">2  Clinical context</a>
-    <div class="step active">3  AI assessment result</div>
-    <div class="step">4  Review &amp; confirm</div>
+    <a class="step done" href="/screens/02-icsr-intake.html">1&nbsp; Upload ICSR data</a>
+    <div class="step active">2&nbsp; Assessment result</div>
+    <div class="step">3&nbsp; Review &amp; confirm</div>
   </div>
 
   <!-- CASE HEADER -->
   <div class="case-band">
     <div class="flex items-center gap-16">
-      <div class="case-id">ICSR-2024-08841</div>
+      <div class="case-id" id="case-id-band">&mdash;</div>
       <div class="case-meta-row">
-        <span class="case-chip">Metformin 500mg</span>
-        <span class="case-chip">Lactic acidosis</span>
-        <span class="case-chip">Female, 54 y</span>
-        <span class="case-chip">Saudi Arabia</span>
+        <span class="case-chip">&mdash;</span>
+        <span class="case-chip">&mdash;</span>
+        <span class="case-chip">&mdash;</span>
+        <span class="case-chip">&mdash;</span>
       </div>
     </div>
-    <div class="case-status">Processed · 2.4 s · NLP + structured pipeline</div>
+    <div class="case-status">Rule-based WHO&ndash;UMC assessment</div>
   </div>
 
   <!-- MAIN GRID -->
@@ -704,182 +415,85 @@
       <!-- VERDICT CARD -->
       <div class="verdict-card">
         <div class="verdict-left">
-          <div class="verdict-eyebrow">WHO–UMC Causality Prediction</div>
-          <div class="verdict-category">Probable / Likely</div>
-          <div class="verdict-sub">
-            Category 2 of 6 &nbsp;·&nbsp; Strong temporal evidence with positive dechallenge<br>
-            Model version 1.4.2 &nbsp;·&nbsp; Trained on VigiBase Q1 2025
-          </div>
+          <div class="verdict-eyebrow">WHO&ndash;UMC Causality Assessment</div>
+          <div class="verdict-category">&mdash;</div>
+          <div class="verdict-sub">&mdash;</div>
         </div>
         <div class="verdict-right">
           <div class="conf-circle">
-            <div class="conf-num">81%</div>
+            <div class="conf-num">&mdash;</div>
             <div class="conf-label">confidence</div>
           </div>
-          <div class="who-badge">Cohen's κ target ≥ 0.60 ✓</div>
+          <div class="conf-note">Fixed value per category, not a model probability</div>
         </div>
       </div>
 
-      <!-- PROBABILITY DISTRIBUTION -->
-      <div class="prob-section">
-        <div class="section-title">Probability distribution — all 6 WHO–UMC categories</div>
+      <!-- SCORE SCALE -->
+      <div class="scale-section">
+        <div class="section-title">Score scale &mdash; how this case was categorised</div>
+        <div class="section-note">
+          The engine sums the WHO&ndash;UMC criteria below into a single score, then maps that score to a category.
+        </div>
 
-        <div class="prob-row">
-          <div class="prob-name">Certain</div>
-          <div class="prob-track"><div class="prob-fill high" style="width:8%"></div></div>
-          <div class="prob-pct">8%</div>
+        <div class="scale-row" data-cat="Certain">
+          <div class="scale-name">Certain</div>
+          <div class="scale-range">score &ge; 6</div>
+          <div class="scale-marker"></div>
         </div>
-        <div class="prob-row">
-          <div class="prob-name active">Probable / Likely</div>
-          <div class="prob-track"><div class="prob-fill active" style="width:81%"></div></div>
-          <div class="prob-pct active">81%</div>
+        <div class="scale-row" data-cat="Probable / Likely">
+          <div class="scale-name">Probable / Likely</div>
+          <div class="scale-range">4 &ndash; 5</div>
+          <div class="scale-marker"></div>
         </div>
-        <div class="prob-row">
-          <div class="prob-name">Possible</div>
-          <div class="prob-track"><div class="prob-fill mid" style="width:8%"></div></div>
-          <div class="prob-pct">8%</div>
+        <div class="scale-row" data-cat="Possible">
+          <div class="scale-name">Possible</div>
+          <div class="scale-range">2 &ndash; 3</div>
+          <div class="scale-marker"></div>
         </div>
-        <div class="prob-row">
-          <div class="prob-name">Unlikely</div>
-          <div class="prob-track"><div class="prob-fill low" style="width:2%"></div></div>
-          <div class="prob-pct">2%</div>
+        <div class="scale-row" data-cat="Unlikely">
+          <div class="scale-name">Unlikely</div>
+          <div class="scale-range">0 &ndash; 1</div>
+          <div class="scale-marker"></div>
         </div>
-        <div class="prob-row">
-          <div class="prob-name">Conditional / Unclassified</div>
-          <div class="prob-track"><div class="prob-fill low" style="width:1%"></div></div>
-          <div class="prob-pct">1%</div>
+        <div class="scale-row unreachable" data-cat="Conditional / Unclassified">
+          <div class="scale-name">Conditional / Unclassified</div>
+          <div class="scale-range">not assigned</div>
+          <div class="scale-marker">Not produced by the current rule set</div>
         </div>
-        <div class="prob-row">
-          <div class="prob-name">Unassessable</div>
-          <div class="prob-track"><div class="prob-fill low" style="width:0%"></div></div>
-          <div class="prob-pct">0%</div>
+        <div class="scale-row" data-cat="Unassessable">
+          <div class="scale-name">Unassessable</div>
+          <div class="scale-range">&lt; 0 or no evidence</div>
+          <div class="scale-marker"></div>
         </div>
       </div>
 
-      <!-- SHAP EXPLAINABILITY -->
-      <div class="shap-section">
-<div class="section-title">Scoring breakdown WHO–UMC criteria applied to this case</div>        <div class="shap-legend">
-          <div class="shap-legend-item">
-            <div class="shap-legend-dot pos"></div> Supports causality
-          </div>
-          <div class="shap-legend-item">
-            <div class="shap-legend-dot neg"></div> Weakens causality
-          </div>
-          <div id=""breakdown-rows></div>
+      <!-- SCORING BREAKDOWN -->
+      <div class="breakdown-section">
+        <div class="section-title">Scoring breakdown &mdash; WHO&ndash;UMC criteria applied to this case</div>
+        <div class="section-note">
+          Each criterion that applied to this case is listed with the weight it contributed to the total score.
         </div>
 
-        <!-- Positive contributors -->
-        <div class="shap-row">
-          <div>
-            <div class="shap-feature">Positive dechallenge</div>
-            <div class="shap-feature-sub">Drug withdrawn → symptoms resolved</div>
+        <div class="bd-legend">
+          <div class="bd-legend-item">
+            <div class="bd-legend-dot pos"></div> Supports causality
           </div>
-          <div class="shap-bar-wrap">
-            <div class="shap-pos-bar" style="width:90%"></div>
+          <div class="bd-legend-item">
+            <div class="bd-legend-dot neg"></div> Weakens causality
           </div>
-          <div class="shap-val pos">+0.41</div>
         </div>
 
-        <div class="shap-row">
-          <div>
-            <div class="shap-feature">Time to onset: 3 days</div>
-            <div class="shap-feature-sub">Biologically plausible window</div>
-          </div>
-          <div class="shap-bar-wrap">
-            <div class="shap-pos-bar" style="width:72%"></div>
-          </div>
-          <div class="shap-val pos">+0.33</div>
+        <div id="breakdown-rows"></div>
+
+        <div class="bd-total" id="breakdown-total" style="display:none">
+          <div class="bd-total-label">Total score</div>
+          <div></div>
+          <div class="bd-total-val" id="breakdown-total-val">0</div>
         </div>
 
-        <div class="shap-row">
-          <div>
-            <div class="shap-feature">Known drug–event pair</div>
-            <div class="shap-feature-sub">Metformin–lactic acidosis in literature</div>
-          </div>
-          <div class="shap-bar-wrap">
-            <div class="shap-pos-bar" style="width:55%"></div>
-          </div>
-          <div class="shap-val pos">+0.25</div>
-        </div>
-
-        <div class="shap-row">
-          <div>
-            <div class="shap-feature">Narrative: "symptoms resolved"</div>
-            <div class="shap-feature-sub">NLP token — resolution language detected</div>
-          </div>
-          <div class="shap-bar-wrap">
-            <div class="shap-pos-bar" style="width:40%"></div>
-          </div>
-          <div class="shap-val pos">+0.18</div>
-        </div>
-
-        <!-- Negative contributors -->
-        <div class="shap-row">
-          <div>
-            <div class="shap-feature">Alternative cause: renal impairment</div>
-            <div class="shap-feature-sub">eGFR 42 — confounding factor present</div>
-          </div>
-          <div class="shap-bar-wrap" style="justify-content:flex-end">
-            <div class="shap-neg-bar" style="width:38%"></div>
-          </div>
-          <div class="shap-val neg">−0.17</div>
-        </div>
-
-        <div class="shap-row">
-          <div>
-            <div class="shap-feature">Rechallenge: not attempted</div>
-            <div class="shap-feature-sub">Confirmatory data unavailable</div>
-          </div>
-          <div class="shap-bar-wrap" style="justify-content:flex-end">
-            <div class="shap-neg-bar" style="width:20%"></div>
-          </div>
-          <div class="shap-val neg">−0.09</div>
-        </div>
-        <!-- SHAP Summary Paragraph -->
-        <div class="shap-summary">
-          <div class="shap-summary-title">AI Reasoning Summary</div>
-          <p class="shap-summary-text" id="shap-paragraph">
-            The AI classified this case as <strong>Probable / Likely</strong> primarily because 
-            the patient's symptoms resolved after the drug was stopped — a positive dechallenge — 
-            which is strong evidence of causality (+0.41). The biologically plausible time to onset 
-            of 3 days further supports this assessment (+0.33). A known relationship between 
-            Metformin and lactic acidosis in the medical literature adds additional confidence (+0.25). 
-            Language in the clinical narrative suggesting symptom resolution was also detected by 
-            the NLP pipeline (+0.18). However, the presence of renal impairment as a potential 
-            alternative cause slightly reduced certainty (−0.17), and the absence of rechallenge 
-            data left some confirmatory evidence unavailable (−0.09).
-          </p>
-        </div>
-      </div>
-
-      <!-- NLP NARRATIVE HIGHLIGHT -->
-      <div class="nlp-section">
-        <div class="section-title">NLP — narrative analysis</div>
-        <div class="nlp-narrative">
-          54-year-old female with Type 2 diabetes prescribed
-          <span class="nlp-highlight-orange">Metformin 500mg</span>.
-          Presented with <span class="nlp-highlight-orange">nausea and elevated lactate</span>
-          <span class="nlp-highlight-green">3 days post-initiation</span>.
-          <span class="nlp-highlight-green">Drug withdrawn</span>;
-          <span class="nlp-highlight-green">symptoms resolved within 48 hours</span>.
-          Renal function borderline
-          <span class="nlp-highlight-gray">(eGFR 42)</span> — possible
-          <span class="nlp-highlight-gray">confounding factor</span>.
-          No rechallenge attempted.
-        </div>
-        <div class="nlp-legend">
-          <div class="nlp-legend-item">
-            <div class="nlp-dot" style="background:rgba(201,100,66,0.25)"></div>
-            Drug / event signal
-          </div>
-          <div class="nlp-legend-item">
-            <div class="nlp-dot" style="background:rgba(36,161,72,0.2)"></div>
-            Supporting evidence
-          </div>
-          <div class="nlp-legend-item">
-            <div class="nlp-dot" style="background:rgba(0,0,0,0.08)"></div>
-            Confounding / neutral
-          </div>
+        <div class="summary-box">
+          <div class="summary-box-title">Assessment reasoning</div>
+          <p class="summary-box-text" id="reasoning-summary">&mdash;</p>
         </div>
       </div>
 
@@ -893,45 +507,43 @@
         <div class="summary-title">Case summary</div>
         <div class="summary-row">
           <span class="summary-key">Case ID</span>
-          <span class="summary-val" style="font-family:var(--font-mono);font-size:11px">ICSR-2024-08841</span>
+          <span class="summary-val" style="font-family:var(--font-mono);font-size:11px">&mdash;</span>
         </div>
         <div class="summary-row">
           <span class="summary-key">Suspect drug</span>
-          <span class="summary-val">Metformin 500mg</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
           <span class="summary-key">Adverse event</span>
-          <span class="summary-val">Lactic acidosis (MedDRA)</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
           <span class="summary-key">Patient</span>
-          <span class="summary-val">Female, 54 y · Saudi Arabia</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
           <span class="summary-key">Time to onset</span>
-          <span class="summary-val">3 days</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
-          <span class="summary-key">Dechallenge</span>
-          <span class="summary-val">Positive</span>
+          <span class="summary-key">Dechallenge performed</span>
+          <span class="summary-val">&mdash;</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-key">Reaction resolved</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
           <span class="summary-key">Rechallenge</span>
-          <span class="summary-val">Not attempted</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
-          <span class="summary-key">Outcome</span>
-          <span class="summary-val">Recovered</span>
+          <span class="summary-key">Alternative cause</span>
+          <span class="summary-val">&mdash;</span>
         </div>
         <div class="summary-row">
-          <span class="summary-key">Reporter</span>
-          <span class="summary-val">Physician</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-key">AI prediction</span>
-          <span class="summary-val">
-            <span class="who-cat-badge cat-probable">● Probable / Likely</span>
-          </span>
+          <span class="summary-key">Assessment</span>
+          <span class="summary-val">&mdash;</span>
         </div>
       </div>
 
@@ -942,39 +554,43 @@
 
           <div class="opt selected" onclick="selectOpt(this)">
             <div class="opt-radio"><div class="opt-radio-inner"></div></div>
-            <div class="opt-label">Confirm AI recommendation</div>
-            <div class="opt-conf">81%</div>
+            <div class="opt-label">Confirm assessment</div>
           </div>
 
           <div class="opt" onclick="selectOpt(this)">
             <div class="opt-radio"><div class="opt-radio-inner"></div></div>
-            <div class="opt-label">Override — Certain</div>
-            <div class="opt-conf">8%</div>
+            <div class="opt-label">Override &mdash; Certain</div>
           </div>
 
           <div class="opt" onclick="selectOpt(this)">
             <div class="opt-radio"><div class="opt-radio-inner"></div></div>
-            <div class="opt-label">Override — Possible</div>
-            <div class="opt-conf">8%</div>
+            <div class="opt-label">Override &mdash; Probable / Likely</div>
           </div>
 
           <div class="opt" onclick="selectOpt(this)">
             <div class="opt-radio"><div class="opt-radio-inner"></div></div>
-            <div class="opt-label">Override — Unlikely</div>
-            <div class="opt-conf">2%</div>
+            <div class="opt-label">Override &mdash; Possible</div>
           </div>
 
           <div class="opt" onclick="selectOpt(this)">
             <div class="opt-radio"><div class="opt-radio-inner"></div></div>
-            <div class="opt-label">Override — Unassessable</div>
-            <div class="opt-conf">—</div>
+            <div class="opt-label">Override &mdash; Unlikely</div>
+          </div>
+
+          <div class="opt" onclick="selectOpt(this)">
+            <div class="opt-radio"><div class="opt-radio-inner"></div></div>
+            <div class="opt-label">Override &mdash; Conditional / Unclassified</div>
+          </div>
+
+          <div class="opt" onclick="selectOpt(this)">
+            <div class="opt-radio"><div class="opt-radio-inner"></div></div>
+            <div class="opt-label">Override &mdash; Unassessable</div>
           </div>
 
         </div>
 
-        <!-- Reasoning -->
         <label class="reasoning-label" for="reasoning">
-        Assessor reasoning <span style="color:var(--w-stone-gray);font-size:11px">(optional)</span>
+          Assessor reasoning <span style="color:var(--w-stone-gray);font-size:11px">(optional)</span>
         </label>
         <textarea
           id="reasoning"
@@ -983,19 +599,13 @@
           rows="4"
         ></textarea>
 
-        <!-- Submit -->
         <button class="submit-btn" onclick="handleSubmit()">
-          Submit &amp; log decision →
+          Submit &amp; log decision &rarr;
         </button>
 
         <div class="audit-note">
-          Decision will be recorded in the immutable audit trail<br>
+          Decision is recorded in the audit trail<br>
           with timestamp, assessor ID, and case reference.
-        </div>
-
-        <!-- Fairness flag -->
-        <div class="fairness-flag">
-          <strong>Fairness note:</strong> Model F1 for Female 55–74 age group is 0.81 — within target range. No demographic flag for this case.
         </div>
 
       </div>
@@ -1005,101 +615,172 @@
 
   <!-- FOOTER -->
   <div class="page-footer">
-    <div>CausalityAI v1.4.2 &nbsp;·&nbsp; WHO–UMC Causality Assessment Engine &nbsp;·&nbsp; SFDA</div>
-    <div class="footer-model">claude-sonnet-4 · VigiBase Q1 2025 · FDA GMLP compliant</div>
+    <div>CausalityAI &nbsp;&middot;&nbsp; WHO&ndash;UMC Causality Assessment Engine &nbsp;&middot;&nbsp; SFDA</div>
+    <div class="footer-model">Rule-based engine &middot; ML model pending dataset training</div>
   </div>
 
   <script>
-    function getCaseIdFromUrl(){
+    // ── Read ?case_id= from the URL ──
+    function getCaseIdFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('case_id');
     }
 
+    // ── Load the case: by ID from the API, or from sessionStorage as fallback ──
     async function loadCase() {
       const caseId = getCaseIdFromUrl();
 
-      if(caseId){
+      if (caseId) {
         const response = await fetch('/api/case/' + caseId);
-        if(!response.ok) return;
-        const result = await response.json();
-        displayCase(result);
+        if (!response.ok) return;
+        displayCase(await response.json());
         return;
       }
 
       const stored = sessionStorage.getItem('assessment');
-      if (stored){
-        displayCase(JSON.parse(stored));
-      }
+      if (stored) displayCase(JSON.parse(stored));
     }
 
-function displayCase(c) {
-      //verdict card
-      const vc = document.querySelector('.verdict-category');
-      if (vc) vc.textContent = c.category;
+    // ── Populate every element from the case object ──
+    function displayCase(c) {
+      // any empty, null or undefined value renders as an em dash
+      const dash = v => (v === null || v === undefined || v === '') ? '\u2014' : v;
+      const caseRef = 'ICSR-' + String(c.id).padStart(4, '0');
 
-      const cn = document.querySelector('.conf-num');
-      if (cn) cn.textContent = c.confidence + '%';
+      // Verdict card
+      document.querySelector('.verdict-category').textContent = dash(c.category);
+      document.querySelector('.conf-num').textContent = c.confidence + '%';
+      document.querySelector('.verdict-sub').textContent =
+        'Score ' + c.score + ' \u00b7 derived from ' +
+        (c.breakdown ? c.breakdown.length : 0) + ' criteria';
 
-      const vs = document.querySelector('.verdict-sub');
-      if (vs) vs.textContent = 'Score: ' + c.score + ' · Rule-based WHO–UMC engine';
-
-      //header chips
+      // Case header band
+      document.getElementById('case-id-band').textContent = caseRef;
       const chips = document.querySelectorAll('.case-chip');
-      if (chips[0]) chips[0].textContent = c.drug || '—';
-      if (chips[1]) chips[1].textContent = '—'; //adverse event                                    
-      if (chips[2]) chips[2].textContent = (c.sex || '—') + ', ' + (c.age || '—') + ' y';
-      if (chips[3]) chips[3].textContent = c.region || '—';
+      chips[0].textContent = dash(c.drug);
+      chips[1].textContent = '\u2014';                              // adverse event — not stored
+      chips[2].textContent = dash(c.sex) + ', ' + dash(c.age) + ' y';
+      chips[3].textContent = dash(c.region);
 
-      //summary panel 
+      // Case summary panel
       const rows = document.querySelectorAll('.summary-val');
-      if (rows[0]) rows[0].textContent = 'ICSR-' + String(c.id).padStart(4, '0'); //case ID 
-      if (rows[1]) rows[1].textContent = c.drug || '—';                            
-      if (rows[2]) rows[2].textContent = '—'; //adverse event                                      
-      if (rows[3]) rows[3].textContent = (c.sex || '—') + ', ' + (c.age || '—') + ' · ' + (c.region || '—');
-      if (rows[4]) rows[4].textContent = c.time_onset  || '—';                     
-      if (rows[5]) rows[5].textContent = c.dechallenge || '—';
-      if (rows[6]) rows[6].textContent = c.rechallenge || '—';
-      if (rows[7]) rows[7].textContent = '—'; //outcome                                      
-      if (rows[8]) rows[8].textContent = '—'; //reporter                                      
-      if (rows[9]) rows[9].textContent = c.category;   
-      
-      displayBreakdown(c.breakdown || []);
+      rows[0].textContent = caseRef;
+      rows[1].textContent = dash(c.drug);
+      rows[2].textContent = '\u2014';                               // adverse event — not stored
+      rows[3].textContent = dash(c.sex) + ', ' + dash(c.age) + ' \u00b7 ' + dash(c.region);
+      rows[4].textContent = dash(c.time_onset);
+      rows[5].textContent = dash(c.dechallenge);
+      rows[6].textContent = dash(c.dechallenge_resolved);
+      rows[7].textContent = dash(c.rechallenge);
+      rows[8].textContent = dash(c.alternative);
+      rows[9].textContent = dash(c.category);
+
+      // Score scale — highlight the band this case falls into
+      document.querySelectorAll('.scale-row').forEach(row => {
+        row.classList.remove('active');
+        const marker = row.querySelector('.scale-marker');
+        if (!row.classList.contains('unreachable')) marker.textContent = '';
+        if (row.dataset.cat === c.category) {
+          row.classList.add('active');
+          marker.textContent = 'This case \u2014 score ' + c.score;
+        }
+      });
+
+      displayBreakdown(c.breakdown || [], c.score, c.category);
     }
 
-    function displayBreakdown(criteria){
+    // ── Render the scoring breakdown ──
+    function displayBreakdown(criteria, score, category) {
       const container = document.getElementById('breakdown-rows');
-      if(!container) return;
+      const total     = document.getElementById('breakdown-total');
 
       container.innerHTML = '';
 
+      if (criteria.length === 0) {
+        container.innerHTML =
+          '<div class="bd-empty">No WHO\u2013UMC criteria were met for this case. ' +
+          'Without dechallenge, rechallenge, time to onset or a narrative, ' +
+          'the case cannot be assessed.</div>';
+        total.style.display = 'none';
+        writeSummary(criteria, score, category);
+        return;
+      }
+
       criteria.forEach(c => {
         const positive = c.weight > 0;
-        //converting weight to bat width *25 mapping a weight of 1 as 25% and 3 to 75%
-        //the bar length stays propotional to how much the critertion happened
-        //assumes max weight is 3 which is a heavier creitrion would overflow the track
+
+        // Convert weight to bar width so length stays proportional to contribution.
+        // x25 maps each unit of weight to 25% of the track:
+        //
+        //   weight |  Math.abs(weight) * 25  |  bar width
+        //   -------|-------------------------|-----------
+        //     +3   |         3 * 25          |    75%
+        //     +1   |         1 * 25          |    25%
+        //     -1   |         1 * 25          |    25%   (right-aligned, grey)
+        //
+        // Math.abs() strips the sign so -1 draws the same length as +1 —
+        // direction is shown by colour and alignment, not by length.
+        // Assumes the largest weight is 3; anything heavier would exceed 100%.
         const width = Math.abs(c.weight) * 25;
 
-        container.innerHTML += `
-                  <div class="shap-row">
-            <div>
-              <div class="shap-feature">${c.label}</div>
-              <div class="shap-feature-sub">${c.detail}</div>
-            </div>
-            <div class="shap-bar-wrap" ${positive ? '' : 'style="justify-content:flex-end"'}>
-              <div class="${positive ? 'shap-pos-bar' : 'shap-neg-bar'}" style="width:${width}%"></div>
-            </div>
-            <div class="shap-val ${positive ? 'pos' : 'neg'}">${positive ? '+' : ''}${c.weight}</div>
-          </div>`;
+        container.innerHTML +=
+          '<div class="bd-row">' +
+            '<div>' +
+              '<div class="bd-feature">' + c.label + '</div>' +
+              '<div class="bd-feature-sub">' + c.detail + '</div>' +
+            '</div>' +
+            '<div class="bd-bar-wrap"' + (positive ? '' : ' style="justify-content:flex-end"') + '>' +
+              '<div class="' + (positive ? 'bd-pos-bar' : 'bd-neg-bar') +
+                   '" style="width:' + width + '%"></div>' +
+            '</div>' +
+            '<div class="bd-val ' + (positive ? 'pos' : 'neg') + '">' +
+              (positive ? '+' : '') + c.weight +
+            '</div>' +
+          '</div>';
       });
+
+      total.style.display = 'grid';
+      document.getElementById('breakdown-total-val').textContent = score;
+
+      writeSummary(criteria, score, category);
     }
 
+    // ── Build the reasoning paragraph from the same criteria ──
+    // Generated from the breakdown so it can never contradict the score above it.
+    function writeSummary(criteria, score, category) {
+      const el = document.getElementById('reasoning-summary');
+
+      if (criteria.length === 0) {
+        el.innerHTML = 'This case was classified as <strong>' + category +
+          '</strong> because none of the WHO\u2013UMC criteria could be evaluated ' +
+          'from the information provided.';
+        return;
+      }
+
+      const supports = criteria.filter(c => c.weight > 0);
+      const weakens  = criteria.filter(c => c.weight < 0);
+      const phrase   = list => list.map(c =>
+        c.label.toLowerCase() + ' (' + (c.weight > 0 ? '+' : '') + c.weight + ')'
+      ).join(', ');
+
+      let text = 'This case scored <strong>' + score +
+                 '</strong>, placing it in the <strong>' + category + '</strong> band. ';
+
+      if (supports.length) text += 'Supporting causality: ' + phrase(supports) + '. ';
+      if (weakens.length)  text += 'Weakening causality: '  + phrase(weakens)  + '. ';
+
+      text += 'The assessor may confirm or override this result.';
+      el.innerHTML = text;
+    }
+
+    // ── Assessor decision ──
     function selectOpt(el) {
       document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
     }
 
     async function handleSubmit() {
-      const reasoning = document.getElementById('reasoning').value.trim();
+      const reasoning  = document.getElementById('reasoning').value.trim();
       const selectedEl = document.querySelector('.opt.selected .opt-label');
 
       if (!selectedEl) {
@@ -1108,10 +789,10 @@ function displayCase(c) {
       }
 
       const selected = selectedEl.textContent;
-      const caseId = getCaseIdFromUrl();
+      const caseId   = getCaseIdFromUrl();
 
       if (!caseId) {
-        alert('No case is loaded — decision cannot be logged.');
+        alert('No case is loaded \u2014 decision cannot be logged.');
         return;
       }
 
@@ -1135,6 +816,7 @@ function displayCase(c) {
         alert('Could not save decision: ' + result.message);
       }
     }
+
     loadCase();
   </script>
 
